@@ -34,11 +34,13 @@ end
 
 local M = {}
 
-M.setup = function()
+M.setup = function(opts)
+	M.temp_playlist_name = opts.temp_playlist_name or "nvim_apple_music"
+
 	print('apple music loaded')
 end
 
-M.temp_playlist_name = "nvim_apple_music"
+
 
 -- NOTE: Requires the song to be a valid title (not fuzzy)
 M.play_track = function(track)
@@ -51,16 +53,10 @@ M.play_track = function(track)
     ]], track)
 
 	local result = execute(command)
-
-	if result then
-		print("Successfully played: " .. track)
-	else
-		print("Failed to play: " .. track)
-	end
 end
 
 M.list_playlists = function()
-	print(am_run("get name of playlists"))
+	am_run("get name of playlists")
 end
 
 M.play_playlist = function(playlist)
@@ -71,15 +67,13 @@ M.play_playlist = function(playlist)
 	]], playlist)
 
 	if execute(cmd) then
-		print("Successfully started playing playlist: " .. playlist)
+		print("Playing playlist: " .. playlist)
 	else
 		print("Failed to play playlist: " .. playlist)
 	end
 end
 
 M.play_album = function(album)
-	print("Playing album: " .. album)
-
 	local command = string.format([[
         osascript -e '
         tell application "Music"
@@ -93,7 +87,7 @@ M.play_album = function(album)
     ]], M.temp_playlist_name, album)
 
 	if execute(command) then
-		print("Successfully started playing album: " .. album)
+		print("Playing album: " .. album)
 	else
 		print("Failed to play album: " .. album)
 	end
@@ -110,8 +104,8 @@ M.previous_track = function()
 end
 
 M.toggle_play = function()
-	am_run("to playpause")
-	print("Apple Music: Toggled Play/Pause")
+	am_run("playpause")
+	print("Apple Music: Toggled Playback")
 end
 
 M.resume = function()
@@ -188,13 +182,8 @@ M.cleanup_all = function()
 	local result = handle:read("*a")
 	handle:close()
 
-	local count = tonumber(result) or 0
-
-	if count > 0 then
-		print(string.format("Removed %d temporary playlist(s)", count))
-	else
-		print("No temporary playlists found to remove")
-	end
+	-- I don't think this works
+	print("Apple Music: Cleaned up " .. result .. " playlists")
 end
 
 
@@ -217,7 +206,7 @@ M.get_playlists = function()
 end
 
 -- Function to open Telescope picker for playlists
-M.select_playlist = function()
+M.select_playlist_telescope = function()
 	local playlists = M.get_playlists()
 
 	pickers.new({}, {
