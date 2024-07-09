@@ -3,6 +3,7 @@ local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+require("nvim-apple-music.commands")
 
 local function execute_applescript(script)
 	local command = 'osascript -e \'' .. script .. '\''
@@ -35,7 +36,7 @@ end
 local M = {}
 
 M.setup = function(opts)
-	M.temp_playlist_name = opts.temp_playlist_name or "nvim_apple_music"
+	M.temp_playlist_name = opts.temp_playlist_name or "M"
 
 	print('apple music loaded')
 end
@@ -53,10 +54,6 @@ M.play_track = function(track)
     ]], track)
 
 	local result = execute(command)
-end
-
-M.list_playlists = function()
-	am_run("get name of playlists")
 end
 
 M.play_playlist = function(playlist)
@@ -220,6 +217,57 @@ M.select_playlist_telescope = function()
 				actions.close(prompt_bufnr)
 				local selection = action_state.get_selected_entry()
 				M.play_playlist(selection[1])
+			end)
+			return true
+		end,
+	}):find()
+end
+
+local remove_duplicates = function(t)
+	local hash = {}
+	local res = {}
+
+	for _, v in ipairs(t) do
+		if not hash[v] then
+			res[#res + 1] = v
+			hash[v] = true
+		end
+	end
+
+	return res
+end
+
+M.get_albums = function()
+	local command = [[osascript  -e 'tell application "Music" to get album of every track']]
+	local handle = io.popen(command)
+	local result = handle:read("*a")
+	handle:close()
+	-- Split the result into a table of album names
+	local albums = {}
+	for album in result:gmatch("([^,]+)") do
+		album = album:match("^%s*(.-)%s*$")
+		table.insert(albums, album)
+	end
+
+	local unique_albums = remove_duplicates(albums)
+
+	return unique_albums
+end
+
+M.select_album_telescope = function()
+	local albums = M.get_albums()
+
+	pickers.new({}, {
+		prompt_title = "Select an album to play",
+		finder = finders.new_table {
+			results = albums
+		},
+		sorter = conf.generic_sorter({}),
+		attach_mappings = function(prompt_bufnr, map)
+			actions.select_default:replace(function()
+				actions.close(prompt_bufnr)
+				local selection = action_state.get_selected_entry()
+				M.play_album(selection[1])
 			end)
 			return true
 		end,
