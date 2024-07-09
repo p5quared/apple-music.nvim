@@ -36,8 +36,6 @@ local M = {}
 
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "M"
-
-	print('apple music loaded')
 end
 
 -- NOTE: Requires the song to be a valid title (not fuzzy)
