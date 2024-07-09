@@ -3,7 +3,6 @@ local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
-require("nvim-apple-music.commands")
 
 local function execute_applescript(script)
 	local command = 'osascript -e \'' .. script .. '\''
@@ -268,6 +267,39 @@ M.select_album_telescope = function()
 				actions.close(prompt_bufnr)
 				local selection = action_state.get_selected_entry()
 				M.play_album(selection[1])
+			end)
+			return true
+		end,
+	}):find()
+end
+
+M.get_tracks = function()
+	local command = [[osascript  -e 'tell application "Music" to get name of every track']]
+	local handle = io.popen(command)
+	local result = handle:read("*a")
+	handle:close()
+	-- Split the result into a table of album names
+	local tracks = {}
+	for track in result:gmatch("([^,]+)") do
+		track = track:match("^%s*(.-)%s*$")
+		table.insert(tracks, track)
+	end
+	return tracks
+end
+
+M.select_track_telescope = function()
+	local tracks = M.get_tracks()
+	pickers.new({}, {
+		prompt_title = "Select a track to play",
+		finder = finders.new_table {
+			results = tracks
+		},
+		sorter = conf.generic_sorter({}),
+		attach_mappings = function(prompt_bufnr, map)
+			actions.select_default:replace(function()
+				actions.close(prompt_bufnr)
+				local selection = action_state.get_selected_entry()
+				M.play_track(selection[1])
 			end)
 			return true
 		end,
