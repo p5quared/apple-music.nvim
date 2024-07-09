@@ -40,8 +40,6 @@ M.setup = function(opts)
 	print('apple music loaded')
 end
 
-
-
 -- NOTE: Requires the song to be a valid title (not fuzzy)
 M.play_track = function(track)
 	print("Playing " .. track)
@@ -142,17 +140,23 @@ M.disable_shuffle = function()
 	end
 end
 
+M.toggle_shuffle = function()
+	if M.shuffle_is_enabled() then
+		M.disable_shuffle()
+		print("Apple Music: Shuffle disabled")
+	else
+		M.enable_shuffle()
+		print("Apple Music: Shuffle enabled")
+	end
+end
+
 M.shuffle_is_enabled = function()
 	local cmd = [[osascript -e 'tell application "Music" to get shuffle enabled']]
 	local handle = io.popen(cmd)
 	local result = handle:read("*a")
 	handle:close()
 	local is_enabled = result:match("true") and true or false
-	if is_enabled then
-		print("Apple Music: Shuffle is enabled")
-	else
-		print("Apple Music: Shuffle is disabled")
-	end
+	return is_enabled
 end
 
 M.cleanup = function()
