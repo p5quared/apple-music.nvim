@@ -20,7 +20,7 @@ jobs:
       - name: Generating help
         run: |
           curl -Lq https://github.com/numToStr/lemmy-help/releases/latest/download/lemmy-help-x86_64-unknown-linux-gnu.tar.gz | tar xz
-          ./lemmy-help lua/apple-music.nvim/init.lua > doc/${{env.PLUGIN_NAME}}.txt
+          ./lemmy-help lua/apple-music/init.lua > doc/${{env.PLUGIN_NAME}}.txt
           rm -rf lemmy-help
 
 
