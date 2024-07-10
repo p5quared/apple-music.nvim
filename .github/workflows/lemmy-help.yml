@@ -9,6 +9,8 @@ env:
 
 jobs:
   docs:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     name: emmylua to vimdoc
     steps:
@@ -17,12 +19,13 @@ jobs:
       - name: Generating help
         run: |
           curl -Lq https://github.com/numToStr/lemmy-help/releases/latest/download/lemmy-help-x86_64-unknown-linux-gnu.tar.gz | tar xz
-          ./lemmy-help lua/apple-music.nvim > doc/${{env.PLUGIN_NAME}}.txt
+          ./lemmy-help lua/apple-music.nvim/init.lua > doc/${{env.PLUGIN_NAME}}.txt
+          rm -rf lemmy-help
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore(docs): auto-generate vimdoc"
           title: "Auto-generate vimdoc"
           body: |
@@ -30,4 +33,3 @@ jobs:
             It updates the vimdoc documentation in the `doc/` directory.
           branch: auto-update-vimdoc
           delete-branch: true
-          file-pattern: doc/*.txt
