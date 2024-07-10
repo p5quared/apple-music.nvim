@@ -1,0 +1,33 @@
+name: lemmy-help
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PLUGIN_NAME: apple-music.nvim
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    name: emmylua to vimdoc
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Generating help
+        run: |
+          curl -Lq https://github.com/numToStr/lemmy-help/releases/latest/download/lemmy-help-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./lemmy-help lua/apple-music.nvim > doc/${{env.PLUGIN_NAME}}.txt
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(docs): auto-generate vimdoc"
+          title: "Auto-generate vimdoc"
+          body: |
+            This PR is automatically created by the lemmy-help GitHub Action.
+            It updates the vimdoc documentation in the `doc/` directory.
+          branch: auto-update-vimdoc
+          delete-branch: true
+          file-pattern: doc/*.txt
