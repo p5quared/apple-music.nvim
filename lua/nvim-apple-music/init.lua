@@ -6,9 +6,9 @@
 ---
 --- For example,
 ---
---- >
+--->
 ---   require('nvim-apple-music').play_track("Sir Duke")
---- <
+---<
 ---@brief ]]
 local pickers = require("telescope.pickers")
 local conf = require("telescope.config").values
@@ -54,7 +54,7 @@ local M = {}
 --- * {temp_playlist_name: string} - The name of the temporary playlist to use
 --- 								(see `apple-music.caveats` for details on temporary playlists)
 M.setup = function(opts)
-	M.temp_playlist_name = opts.temp_playlist_name or "M"
+	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
 end
 
 ---Play a track by title
@@ -207,9 +207,11 @@ end
 ---For now this just triest to delete the temporary playlist 1000 times.
 ---@usage require('nvim-apple-music').cleanup()
 M.cleanup = function()
-	for i = 1, 1000 do
-		am_run("delete playlist \"" .. M.temp_playlist_name .. "\"")
-	end
+	am_run("delete playlist \"" .. M.temp_playlist_name .. "\"")
+	local command =
+		[[osascript -e 'tell application "Music"' -e 'if (exists playlist]] ..
+		M.temp_playlist_name ..
+		[[) then' -e 'delete playlist "]] .. M.temp_playlist_name .. [["' -e 'end if' -e 'end tell']]
 	print("Apple Music: Cleaned up")
 end
 
@@ -347,3 +349,10 @@ M.select_track_telescope = function()
 end
 
 return M
+
+---@mod apple-music.caveats CAVEATS
+---@brief [[
+---
+--- In order to play albums
+---
+---@brief ]]
