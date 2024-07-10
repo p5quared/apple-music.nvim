@@ -349,10 +349,3 @@ M.select_track_telescope = function()
 end
 
 return M
-
----@mod apple-music.caveats CAVEATS
----@brief [[
----
---- In order to play albums
----
----@brief ]]
