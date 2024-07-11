@@ -40,50 +40,7 @@ require('nvim-apple-music').setup({
 
 ### Commands
 
-- `:lua require('nvim-apple-music').play_track("Track Name")`  
-  Play a specific track by its name.
-
-- `:lua require('nvim-apple-music').list_playlists()`  
-  List all playlists in Apple Music.
-
-- `:lua require('nvim-apple-music').play_playlist("Playlist Name")`  
-  Play a specific playlist by its name.
-
-- `:lua require('nvim-apple-music').play_album("Album Name")`  
-  Play a specific album by its name.
-
-- `:lua require('nvim-apple-music').next_track()`  
-  Skip to the next track.
-
-- `:lua require('nvim-apple-music').previous_track()`  
-  Go back to the previous track.
-
-- `:lua require('nvim-apple-music').toggle_play()`  
-  Toggle play/pause.
-
-- `:lua require('nvim-apple-music').resume()`  
-  Resume playback.
-
-- `:lua require('nvim-apple-music').pause()`  
-  Pause playback.
-
-- `:lua require('nvim-apple-music').enable_shuffle()`  
-  Enable shuffle mode.
-
-- `:lua require('nvim-apple-music').disable_shuffle()`  
-  Disable shuffle mode.
-
-- `:lua require('nvim-apple-music').shuffle_is_enabled()`  
-  Check if shuffle mode is enabled.
-
-- `:lua require('nvim-apple-music').cleanup()`  
-  Clean up temporary playlists created by the plugin.
-
-- `:lua require('nvim-apple-music').cleanup_all()`  
-  Clean up all temporary playlists created by the plugin.
-
-- `:lua require('nvim-apple-music').select_playlist()`  
-  Open a Telescope picker to select and play a playlist.
+See [doc/apple-music.txt](doc/apple-music.txt) for an overview of commands.
 
 ## Example
 
