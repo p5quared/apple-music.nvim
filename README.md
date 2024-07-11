@@ -26,12 +26,12 @@ Here is how I have this plugin setup, minus the dev stuff.
     dependencies = { 'nvim-telescope/telescope.nvim' },
     config = true,
     keys = {
-        { "<leader>amp", function() require("apple-music").toggle_play() end,               desc = "Apple Music: Toggle Playback" },
-        { "<leader>ams", function() require("apple-music").toggle_shuffle() end,            desc = "Apple Music: Toggle Shuffle" },
-        { "<leader>fp",  function() require("apple-music").select_playlist_telescope() end, desc = "Apple Music: Select Playlist with Telescope" },
-        { "<leader>fa",  function() require("apple-music").select_album_telescope() end,    desc = "Apple Music: Select Album with Telescope" },
-        { "<leader>fs",  function() require("apple-music").select_track_telescope() end,    desc = "Apple Music: Select Track with Telescope" },
-        { "<leader>amx", function() require("apple-music").cleanup() end,                   desc = "Apple Music: Cleanup Temporary Playlists" },
+        { "<leader>amp", function() require("apple-music").toggle_play() end,               desc = "Toggle [P]layback" },
+        { "<leader>ams", function() require("apple-music").toggle_shuffle() end,            desc = "Toggle [S]huffle" },
+        { "<leader>fp",  function() require("apple-music").select_playlist_telescope() end, desc = "[F]ind [P]laylists" },
+        { "<leader>fa",  function() require("apple-music").select_album_telescope() end,    desc = "[F]ind [A]lbum" },
+        { "<leader>fs",  function() require("apple-music").select_track_telescope() end,    desc = "[F]ind [S]ong" },
+        { "<leader>amx", function() require("apple-music").cleanup_all() end,               desc = "Cleanup Temp Playlists" },
     },
 }
 ```
