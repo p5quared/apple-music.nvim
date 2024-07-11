@@ -2,6 +2,8 @@
 
 This Neovim plugin allows you to control Apple Music directly from within Neovim using Lua and Telescope. You can play tracks, playlists, and albums, control playback, and manage shuffle settings without leaving your favorite text editor.
 
+![Demo of Selecting Album via Telescope](demos/select_album.gif)
+
 ## Features
 
 - Play specific tracks, playlists, or albums.
