@@ -204,7 +204,7 @@ M.shuffle_is_enabled = function()
 end
 
 ---Cleanup temporary playlists. See `apple-music.caveats` for details.
----For now this just triest to delete the temporary playlist 1000 times.
+---You may have to call this multiple times to remove the playlist.
 ---@usage require('nvim-apple-music').cleanup()
 M.cleanup = function()
 	am_run("delete playlist \"" .. M.temp_playlist_name .. "\"")

@@ -18,16 +18,31 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 
+Here is how I have this plugin setup, minus the dev stuff.
+
 ```lua
 {
-  'p5quared/nvim-apple-music',
-  dependencies = { 'nvim-telescope/telescope.nvim' },
-  keys = {
-    { "<leader>fp", function() require('apple-music').select_playlist_telescope() end, desc="[F]ind [P]laylist" }
-  },
-  config = true,
+    'p5quared/apple-music.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim' },
+    config = true,
+    keys = {
+        { "<leader>amp", function() require("apple-music").toggle_play() end,               desc = "Apple Music: Toggle Playback" },
+        { "<leader>ams", function() require("apple-music").toggle_shuffle() end,            desc = "Apple Music: Toggle Shuffle" },
+        { "<leader>fp",  function() require("apple-music").select_playlist_telescope() end, desc = "Apple Music: Select Playlist with Telescope" },
+        { "<leader>fa",  function() require("apple-music").select_album_telescope() end,    desc = "Apple Music: Select Album with Telescope" },
+        { "<leader>fs",  function() require("apple-music").select_track_telescope() end,    desc = "Apple Music: Select Track with Telescope" },
+        { "<leader>amx", function() require("apple-music").cleanup() end,                   desc = "Apple Music: Cleanup Temporary Playlists" },
+    },
 }
 ```
+
+I think this is a good overview of the main functionality as well.
+Toggling playback is arguably just as easy to do with general keyboard shortcuts
+(nowadays you often have media keys). I think the ability to browse
+and play via telescope is the the most useful feature of this plugin.
+
+Note that you have to manually cleanup the temporary playlists created by this plugin.
+In the future I may try to come up with an autocmd solution.
 
 ## Configuration
 
@@ -69,5 +84,10 @@ Contributions are welcome! Please feel free to open issues or submit pull reques
 
 ## Acknowledgements
 
-- [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
 - [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [mcthomas/Apple-Music-CLI-Player](https://github.com/mcthomas/Apple-Music-CLI-Player)
+    - Much of the Apple Script was taken/heavily inspired from this repo.
+    I probably could have pieced together a lot of the basic stuff, but probably
+    not the workaround for playing albums with temporary playlists...
+- [Temporary Playlist Workaround](https://discussions.apple.com/thread/1053355?sortBy=best)
+    - Well that temp playlist workaround from mcthomas was actually from here.
