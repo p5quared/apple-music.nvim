@@ -21,7 +21,10 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 ```lua
 {
   'p5quared/nvim-apple-music',
-  dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim' },
+  dependencies = { 'nvim-telescope/telescope.nvim' },
+  keys = {
+    { "<leader>fp", function() require('apple-music').select_playlist_telescop() end, desc="[F]ind [P]laylist" }
+  }
   config = true,
 }
 ```
@@ -31,7 +34,7 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 You can customize the plugin by passing options to the `setup` function:
 
 ```lua
-require('nvim-apple-music').setup({
+require('apple-music').setup({
   temp_playlist_name = "nvim_apple_music_temp"  -- Custom temporary playlist name
 })
 ```
@@ -47,13 +50,13 @@ See [doc/apple-music.txt](doc/apple-music.txt) for an overview of commands.
 To play a specific track, you can use the following command in Neovim:
 
 ```vim
-:lua require('nvim-apple-music').play_track("Bohemian Rhapsody")
+:lua require('apple-music').play_track("Bohemian Rhapsody")
 ```
 
 To open the Telescope picker and select a playlist to play:
 
 ```vim
-:lua require('nvim-apple-music').select_playlist_telescope()
+:lua require('apple-music').select_playlist_telescope()
 ```
 
 ## License
