@@ -203,16 +203,23 @@ M.shuffle_is_enabled = function()
 	return is_enabled
 end
 
+M._cleanup = function()
+	am_run("delete playlist \"" .. M.temp_playlist_name .. "\"")
+end
+
 ---Cleanup temporary playlists. See `apple-music.caveats` for details.
 ---You may have to call this multiple times to remove the playlist.
 ---@usage require('nvim-apple-music').cleanup()
 M.cleanup = function()
-	am_run("delete playlist \"" .. M.temp_playlist_name .. "\"")
-	local command =
-		[[osascript -e 'tell application "Music"' -e 'if (exists playlist]] ..
-		M.temp_playlist_name ..
-		[[) then' -e 'delete playlist "]] .. M.temp_playlist_name .. [["' -e 'end if' -e 'end tell']]
+	M._cleanup()
 	print("Apple Music: Cleaned up")
+end
+
+M.cleanup_all = function()
+	for i = 1, 10 do
+		M._cleanup()
+	end
+	print("Apple Music: Cleaned up all")
 end
 
 ---Get a list of playlists from your Apple Music library
