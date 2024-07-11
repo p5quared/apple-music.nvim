@@ -23,8 +23,8 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
   'p5quared/nvim-apple-music',
   dependencies = { 'nvim-telescope/telescope.nvim' },
   keys = {
-    { "<leader>fp", function() require('apple-music').select_playlist_telescop() end, desc="[F]ind [P]laylist" }
-  }
+    { "<leader>fp", function() require('apple-music').select_playlist_telescope() end, desc="[F]ind [P]laylist" }
+  },
   config = true,
 }
 ```
