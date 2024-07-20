@@ -71,6 +71,12 @@ To open the Telescope picker and select a playlist to play:
 :lua require('apple-music').select_playlist_telescope()
 ```
 
+## !IMPORTANT!
+In order to play albums, I am using a workaround described in the acknowledgements where I create temporary playlists from the songs contained in an album. This means every time you play an album, it will add a playlist to your library. That is why there is the capability to cleanup these temporrary playlists:
+```lua
+require("apple-music").cleanup_all()
+```
+
 ## License
 
 This plugin is released under the MIT License. See [LICENSE](./LICENSE) for more information.
