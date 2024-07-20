@@ -240,18 +240,15 @@ end
 ---Get a list of playlists from your Apple Music library
 ---@usage require('nvim-apple-music').get_playlists()
 M.get_playlists = function()
-	local command = [[osascript -e 'tell application "Music" to get name of playlists']]
+	local command = [[osascript -e 'tell application "Music" to get name of playlists' -s s]]
 
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
 
-	-- Split the result into a table of playlist names
-	local playlists = {}
-	for playlist in result:gmatch("([^,]+)") do
-		playlist = playlist:match("^%s*(.-)%s*$")
-		table.insert(playlists, playlist)
-	end
+	-- Convert table string into table
+	local result_chunk = "return " .. result
+	local playlists = loadstring(result_chunk)()
 
 	return playlists
 end
@@ -295,16 +292,14 @@ end
 ---Get a list of albums from your Apple Music library
 ---@usage require('nvim-apple-music').get_albums()
 M.get_albums = function()
-	local command = [[osascript  -e 'tell application "Music" to get album of every track']]
+	local command = [[osascript  -e 'tell application "Music" to get album of every track' -s s]]
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
-	-- Split the result into a table of album names
-	local albums = {}
-	for album in result:gmatch("([^,]+)") do
-		album = album:match("^%s*(.-)%s*$")
-		table.insert(albums, album)
-	end
+
+	-- Convert table string into table
+	local result_chunk = "return " .. result
+	local albums = loadstring(result_chunk)()
 
 	local unique_albums = remove_duplicates(albums)
 
@@ -336,16 +331,15 @@ end
 ---Get a list of tracks from your Apple Music library
 ---@usage require('nvim-apple-music').get_tracks()
 M.get_tracks = function()
-	local command = [[osascript  -e 'tell application "Music" to get name of every track']]
+	local command = [[osascript  -e 'tell application "Music" to get name of every track' -s s]]
 	local handle = io.popen(command)
 	local result = handle:read("*a")
 	handle:close()
-	-- Split the result into a table of album names
-	local tracks = {}
-	for track in result:gmatch("([^,]+)") do
-		track = track:match("^%s*(.-)%s*$")
-		table.insert(tracks, track)
-	end
+
+	-- Convert table string into table
+	local result_chunk = "return " .. result
+	local tracks = loadstring(result_chunk)()
+
 	return tracks
 end
 
