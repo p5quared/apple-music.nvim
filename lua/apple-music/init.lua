@@ -45,8 +45,8 @@ local execute = function(cmd)
 end
 
 local grab_os_version = function()
-	local cmd = [[ osascript -e 'set osver to system version of (system info)' ]]
-	local _, result = execute(cmd)
+	local command = [[ osascript -e 'set osver to system version of (system info)' ]]
+	local _, result = execute(command)
 	return tonumber(result)
 end
 
@@ -192,14 +192,14 @@ end
 ---@usage require('apple-music').set_current_track_favorited(true)
 ---@usage require('apple-music').set_current_track_favorited(false)
 M.set_current_track_favorited = function(state)
-  local cmd_property = "favorited"
+  local command_property = "favorited"
   if grab_os_version() < 14 then
-    cmd_property = "loved"
+    command_property = "loved"
   end
-	local command = string.format([[
+  local command = string.format([[
     osascript -e 'tell application "Music" to set %s of current track to "%s"'
-  ]], cmd_property, state)
-	local success = execute(command)
+  ]], command_property, state)
+  local success = execute(command)
   if not success then
     print("Could not set current track as favorited")
     return
