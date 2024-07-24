@@ -4,6 +4,12 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 
 ![Demo of Selecting Album via Telescope](demos/select_album.gif)
 
+## Note: Temporary Playlists
+In order to play albums, I am using a workaround described in the acknowledgements where I create temporary playlists from the songs contained in an album. This means every time you play an album it will add a playlist to your library. That is why there is the capability to cleanup these temporary playlists:
+```lua
+require("apple-music").cleanup_all()
+```
+
 ## Features
 
 - Play specific tracks, playlists, or albums.
@@ -69,12 +75,6 @@ To open the Telescope picker and select a playlist to play:
 
 ```vim
 :lua require('apple-music').select_playlist_telescope()
-```
-
-## !IMPORTANT!
-In order to play albums, I am using a workaround described in the acknowledgements where I create temporary playlists from the songs contained in an album. This means every time you play an album it will add a playlist to your library. That is why there is the capability to cleanup these temporary playlists:
-```lua
-require("apple-music").cleanup_all()
 ```
 
 ## License
