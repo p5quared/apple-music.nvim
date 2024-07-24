@@ -8,7 +8,7 @@ INTRODUCTION                                                 *apple-music.intro*
  For example,
 
 >
-   require('nvim-apple-music').play_track("Sir Duke")
+   require('apple-music').play_track("Sir Duke")
 <
 
 ==============================================================================
@@ -20,60 +20,60 @@ M.setup()                                                              *M.setup*
 
 
 M.play_track()                                                    *M.play_track*
-    @usage require('nvim-apple-music').play_track("Sir Duke")
+    @usage require('apple-music').play_track("Sir Duke")
 
 
 M.play_playlist()                                              *M.play_playlist*
-    @usage require('nvim-apple-music').play_playlist("Slow Dance")
+    @usage require('apple-music').play_playlist("Slow Dance")
 
 
 M.play_album()                                                    *M.play_album*
-    @usage require('nvim-apple-music').play_album("Nashville Skyline")
+    @usage require('apple-music').play_album("Nashville Skyline")
 
 
 M.next_track()                                                    *M.next_track*
     Play the next track
-    @usage require('nvim-apple-music').next_track()
+    @usage require('apple-music').next_track()
 
 
 M.previous_track()                                            *M.previous_track*
     Play the previous track
-    @usage require('nvim-apple-music').previous_track()
+    @usage require('apple-music').previous_track()
 
 
 M.toggle_play()                                                  *M.toggle_play*
     Toggle playback (play/pause)
-    @usage require('nvim-apple-music').toggle_play()
+    @usage require('apple-music').toggle_play()
 
 
 M.resume()                                                            *M.resume*
     Resume playback
-    @usage require('nvim-apple-music').resume()
+    @usage require('apple-music').resume()
 
 
 M.pause()                                                              *M.pause*
     Puase Playback
-    @usage require('nvim-apple-music').pause()
+    @usage require('apple-music').pause()
 
 
 M.enable_shuffle()                                            *M.enable_shuffle*
     Enable shuffle
-    @usage require('nvim-apple-music').enable_shuffle()
+    @usage require('apple-music').enable_shuffle()
 
 
 M.disable_shuffle()                                          *M.disable_shuffle*
     Disable shuffle
-    @usage require('nvim-apple-music').disable_shuffle()
+    @usage require('apple-music').disable_shuffle()
 
 
 M.toggle_shuffle()                                            *M.toggle_shuffle*
     Toggle shuffle
-    @usage require('nvim-apple-music').toggle_shuffle()
+    @usage require('apple-music').toggle_shuffle()
 
 
 M.shuffle_is_enabled()                                    *M.shuffle_is_enabled*
     Determine if shuffle is enabled
-    @usage require('nvim-apple-music').shuffle_is_enabled()
+    @usage require('apple-music').shuffle_is_enabled()
 
 
 M._cleanup()                                                        *M._cleanup*
@@ -82,44 +82,44 @@ M._cleanup()                                                        *M._cleanup*
 M.cleanup()                                                          *M.cleanup*
     Delete temporary playlist. See `apple-music.caveats` for details.
     You may have to call this multiple times to remove all temporary playlists.
-    @usage require('nvim-apple-music').cleanup()
+    @usage require('apple-music').cleanup()
 
 
 M.cleanup_all()                                                  *M.cleanup_all*
     Cleanup all temporary playlists, as long as you have less than 10...
     You may still have to call this multiple times.
     There may be weird text written to your screen, but restarting neovim will fix this.
-    @usage require('nvim-apple-music').cleanup_all()
+    @usage require('apple-music').cleanup_all()
 
 
 M.get_playlists()                                              *M.get_playlists*
     Get a list of playlists from your Apple Music library
-    @usage require('nvim-apple-music').get_playlists()
+    @usage require('apple-music').get_playlists()
 
 
 M.select_playlist_telescope()                      *M.select_playlist_telescope*
     Select and play a playlist using Telescope
-    @usage require('nvim-apple-music').select_playlist_telescope()
+    @usage require('apple-music').select_playlist_telescope()
 
 
 M.get_albums()                                                    *M.get_albums*
     Get a list of albums from your Apple Music library
-    @usage require('nvim-apple-music').get_albums()
+    @usage require('apple-music').get_albums()
 
 
 M.select_album_telescope()                            *M.select_album_telescope*
     Select and play an album using Telescope
-    @usage require('nvim-apple-music').select_album_telescope()
+    @usage require('apple-music').select_album_telescope()
 
 
 M.get_tracks()                                                    *M.get_tracks*
     Get a list of tracks from your Apple Music library
-    @usage require('nvim-apple-music').get_tracks()
+    @usage require('apple-music').get_tracks()
 
 
 M.select_track_telescope()                            *M.select_track_telescope*
     Select and play a track using Telescope
-    @usage require('nvim-apple-music').select_track_telescope()
+    @usage require('apple-music').select_track_telescope()
 
 
 vim:tw=78:ts=8:noet:ft=help:norl:
