@@ -186,6 +186,22 @@ M.disable_shuffle = function()
 	end
 end
 
+---Change the favorited state of the current music.
+---It also handles Mac OS versions below 14 (Sonoma) where it used to be called "loved".
+---@param state boolean: The state of favorited to be set for current track.
+---@usage require('apple-music').set_current_track_favorited(true)
+---@usage require('apple-music').set_current_track_favorited(false)
+M.set_current_track_favorited = function(state)
+  local cmd_property = "favorited"
+  if grab_os_version() < 14 then
+    cmd_property = "loved"
+  end
+	local command = string.format([[
+    osascript -e 'tell application "Music" to set %s of current track to "%s"'
+  ]], cmd_property, state)
+	execute(command)
+end
+
 ---Toggle shuffle
 ---@usage require('apple-music').toggle_shuffle()
 M.toggle_shuffle = function()
