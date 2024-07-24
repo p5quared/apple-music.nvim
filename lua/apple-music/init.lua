@@ -192,6 +192,10 @@ end
 ---@usage require('apple-music').set_current_track_favorited(true)
 ---@usage require('apple-music').set_current_track_favorited(false)
 M.set_current_track_favorited = function(state)
+	local track = M.get_current_track()
+	if not track then
+		return
+	end
 	local command_property = "favorited"
 	-- Before version 14 (Sonoma) the property was called `loved`
 	if grab_os_version() < 14 then
@@ -202,12 +206,7 @@ M.set_current_track_favorited = function(state)
 		command_property,
 		state
 	)
-	local success = execute(command)
-	if not success then
-		print("Could not set current track as favorited")
-		return
-	end
-	local track = M.get_current_track()
+	execute(command)
 	if state then
 		print("Favorited track: '" .. track .. "'")
 	else
@@ -368,6 +367,10 @@ end
 M.get_current_track = function()
 	local command = [[osascript -e 'tell application "Music" to get {name, artist} of current track' -s s]]
 	local _, result = execute(command)
+	if result == "" then
+		print("Could not get current track")
+		return
+	end
 	local result_chunk = "return " .. result
 	local current_track = loadstring(result_chunk)()
 	return current_track[1] .. " - " .. current_track[2]
