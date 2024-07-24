@@ -7,7 +7,7 @@
 --- For example,
 ---
 --->
----   require('nvim-apple-music').play_track("Sir Duke")
+---   require('apple-music').play_track("Sir Duke")
 ---<
 ---@brief ]]
 local pickers = require("telescope.pickers")
@@ -59,7 +59,7 @@ end
 
 ---Play a track by title
 ---@param track string: The title of the track to play
----@usage require('nvim-apple-music').play_track("Sir Duke")
+---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
 	local command = string.format([[
@@ -74,7 +74,7 @@ end
 
 ---Play a playlist by name
 ---@param playlist string: The name of the playlist to play
----@usage require('nvim-apple-music').play_playlist("Slow Dance")
+---@usage require('apple-music').play_playlist("Slow Dance")
 M.play_playlist = function(playlist)
 	local cmd = string.format([[
 		osascript -e '
@@ -92,7 +92,7 @@ end
 ---Play an album by name
 ---NOTE: This will create a temporary playlist with the tracks from the album. See `apple-music.caveats` for details.
 ---@param album string: The name of the album to play
----@usage require('nvim-apple-music').play_album("Nashville Skyline")
+---@usage require('apple-music').play_album("Nashville Skyline")
 M.play_album = function(album)
 	local command = string.format([[
         osascript -e '
@@ -114,42 +114,42 @@ M.play_album = function(album)
 end
 
 ---Play the next track
----@usage require('nvim-apple-music').next_track()
+---@usage require('apple-music').next_track()
 M.next_track = function()
 	am_app_run("play next track")
 	print("Apple Music: Next Track")
 end
 
 ---Play the previous track
----@usage require('nvim-apple-music').previous_track()
+---@usage require('apple-music').previous_track()
 M.previous_track = function()
 	am_run("previous track")
 	print("Apple Music: Previous Track")
 end
 
 ---Toggle playback (play/pause)
----@usage require('nvim-apple-music').toggle_play()
+---@usage require('apple-music').toggle_play()
 M.toggle_play = function()
 	am_run("playpause")
 	print("Apple Music: Toggled Playback")
 end
 
 ---Resume playback
----@usage require('nvim-apple-music').resume()
+---@usage require('apple-music').resume()
 M.resume = function()
 	am_run("play")
 	print("Apple Music: Resumed")
 end
 
 ---Puase Playback
----@usage require('nvim-apple-music').pause()
+---@usage require('apple-music').pause()
 M.pause = function()
 	am_run("pause")
 	print("Apple Music: Paused")
 end
 
 ---Enable shuffle
----@usage require('nvim-apple-music').enable_shuffle()
+---@usage require('apple-music').enable_shuffle()
 M.enable_shuffle = function()
 	local cmd = [[ osascript -e 'tell application "Music" to set shuffle enabled to true']]
 
@@ -165,7 +165,7 @@ M.enable_shuffle = function()
 end
 
 ---Disable shuffle
----@usage require('nvim-apple-music').disable_shuffle()
+---@usage require('apple-music').disable_shuffle()
 M.disable_shuffle = function()
 	local cmd = [[ osascript -e 'tell application "Music" to set shuffle enabled to false']]
 
@@ -181,7 +181,7 @@ M.disable_shuffle = function()
 end
 
 ---Toggle shuffle
----@usage require('nvim-apple-music').toggle_shuffle()
+---@usage require('apple-music').toggle_shuffle()
 M.toggle_shuffle = function()
 	if M.shuffle_is_enabled() then
 		M.disable_shuffle()
@@ -193,7 +193,7 @@ M.toggle_shuffle = function()
 end
 
 ---Determine if shuffle is enabled
----@usage require('nvim-apple-music').shuffle_is_enabled()
+---@usage require('apple-music').shuffle_is_enabled()
 M.shuffle_is_enabled = function()
 	local cmd = [[osascript -e 'tell application "Music" to get shuffle enabled']]
 	local handle = io.popen(cmd)
@@ -220,7 +220,7 @@ end
 
 ---Delete temporary playlist. See `apple-music.caveats` for details.
 ---You may have to call this multiple times to remove all temporary playlists.
----@usage require('nvim-apple-music').cleanup()
+---@usage require('apple-music').cleanup()
 M.cleanup = function()
 	M._cleanup()
 	print("Apple Music: Cleaned up")
@@ -229,7 +229,7 @@ end
 ---Cleanup all temporary playlists, as long as you have less than 10...
 ---You may still have to call this multiple times.
 ---There may be weird text written to your screen, but restarting neovim will fix this.
----@usage require('nvim-apple-music').cleanup_all()
+---@usage require('apple-music').cleanup_all()
 M.cleanup_all = function()
 	for i = 1, 10 do
 		M._cleanup()
@@ -238,7 +238,7 @@ M.cleanup_all = function()
 end
 
 ---Get a list of playlists from your Apple Music library
----@usage require('nvim-apple-music').get_playlists()
+---@usage require('apple-music').get_playlists()
 M.get_playlists = function()
 	local command = [[osascript -e 'tell application "Music" to get name of playlists' -s s]]
 
@@ -254,7 +254,7 @@ M.get_playlists = function()
 end
 
 ---Select and play a playlist using Telescope
----@usage require('nvim-apple-music').select_playlist_telescope()
+---@usage require('apple-music').select_playlist_telescope()
 M.select_playlist_telescope = function()
 	local playlists = M.get_playlists()
 
@@ -290,7 +290,7 @@ local remove_duplicates = function(t)
 end
 
 ---Get a list of albums from your Apple Music library
----@usage require('nvim-apple-music').get_albums()
+---@usage require('apple-music').get_albums()
 M.get_albums = function()
 	local command = [[osascript  -e 'tell application "Music" to get album of every track' -s s]]
 	local handle = io.popen(command)
@@ -307,7 +307,7 @@ M.get_albums = function()
 end
 
 ---Select and play an album using Telescope
----@usage require('nvim-apple-music').select_album_telescope()
+---@usage require('apple-music').select_album_telescope()
 M.select_album_telescope = function()
 	local albums = M.get_albums()
 
@@ -329,7 +329,7 @@ M.select_album_telescope = function()
 end
 
 ---Get a list of tracks from your Apple Music library
----@usage require('nvim-apple-music').get_tracks()
+---@usage require('apple-music').get_tracks()
 M.get_tracks = function()
 	local command = [[osascript  -e 'tell application "Music" to get name of every track' -s s]]
 	local handle = io.popen(command)
@@ -344,7 +344,7 @@ M.get_tracks = function()
 end
 
 ---Select and play a track using Telescope
----@usage require('nvim-apple-music').select_track_telescope()
+---@usage require('apple-music').select_track_telescope()
 M.select_track_telescope = function()
 	local tracks = M.get_tracks()
 	pickers.new({}, {
