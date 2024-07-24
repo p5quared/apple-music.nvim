@@ -199,7 +199,17 @@ M.set_current_track_favorited = function(state)
 	local command = string.format([[
     osascript -e 'tell application "Music" to set %s of current track to "%s"'
   ]], cmd_property, state)
-	execute(command)
+	local success = execute(command)
+  if not success then
+    print("Could not set current track as favorited")
+    return
+  end
+  local track = M.get_current_track()
+  if state then
+    print("Favorited track: '" .. track .. "'")
+  else
+    print("Undid favorite for: '" .. track .. "'")
+  end
 end
 
 ---Toggle shuffle
