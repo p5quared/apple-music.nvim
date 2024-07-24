@@ -193,6 +193,7 @@ end
 ---@usage require('apple-music').set_current_track_favorited(false)
 M.set_current_track_favorited = function(state)
 	local command_property = "favorited"
+	-- Before version 14 (Sonoma) the property was called `loved`
 	if grab_os_version() < 14 then
 		command_property = "loved"
 	end
