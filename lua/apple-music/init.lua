@@ -192,24 +192,26 @@ end
 ---@usage require('apple-music').set_current_track_favorited(true)
 ---@usage require('apple-music').set_current_track_favorited(false)
 M.set_current_track_favorited = function(state)
-  local command_property = "favorited"
-  if grab_os_version() < 14 then
-    command_property = "loved"
-  end
-  local command = string.format([[
-    osascript -e 'tell application "Music" to set %s of current track to "%s"'
-  ]], command_property, state)
-  local success = execute(command)
-  if not success then
-    print("Could not set current track as favorited")
-    return
-  end
-  local track = M.get_current_track()
-  if state then
-    print("Favorited track: '" .. track .. "'")
-  else
-    print("Undid favorite for: '" .. track .. "'")
-  end
+	local command_property = "favorited"
+	if grab_os_version() < 14 then
+		command_property = "loved"
+	end
+	local command = string.format(
+		[[ osascript -e 'tell application "Music" to set %s of current track to "%s"' ]],
+		command_property,
+		state
+	)
+	local success = execute(command)
+	if not success then
+		print("Could not set current track as favorited")
+		return
+	end
+	local track = M.get_current_track()
+	if state then
+		print("Favorited track: '" .. track .. "'")
+	else
+		print("Undid favorite for: '" .. track .. "'")
+	end
 end
 
 ---Toggle shuffle
@@ -363,11 +365,11 @@ end
 ---Get the name and artist of the current track (in the following format: <name> - <author>).
 ---@usage require('apple-music').get_current_track()
 M.get_current_track = function()
-  local command = [[osascript -e 'tell application "Music" to get {name, artist} of current track' -s s]]
-  local _, result = execute(command)
+	local command = [[osascript -e 'tell application "Music" to get {name, artist} of current track' -s s]]
+	local _, result = execute(command)
 	local result_chunk = "return " .. result
 	local current_track = loadstring(result_chunk)()
-  return current_track[1] .. " - " .. current_track[2]
+	return current_track[1] .. " - " .. current_track[2]
 end
 
 ---Get a list of tracks from your Apple Music library
