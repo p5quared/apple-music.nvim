@@ -44,6 +44,12 @@ local execute = function(cmd)
 	return pcall(exe, cmd)
 end
 
+local grab_os_version = function()
+	local cmd = [[ osascript -e 'set osver to system version of (system info)' ]]
+	local _, result = execute(cmd)
+	return tonumber(result)
+end
+
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
 
