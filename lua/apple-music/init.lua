@@ -362,18 +362,16 @@ M.select_album_telescope = function()
 	}):find()
 end
 
----Get the name and artist of the current track (in the following format: <name> - <author>).
+---Get the name of the current track.
 ---@usage require('apple-music').get_current_track()
 M.get_current_track = function()
-	local command = [[osascript -e 'tell application "Music" to get {name, artist} of current track' -s s]]
-	local _, result = execute(command)
-	if result == "" then
-		print("Could not get current track")
-		return
-	end
-	local result_chunk = "return " .. result
-	local current_track = loadstring(result_chunk)()
-	return current_track[1] .. " - " .. current_track[2]
+  local command = [[osascript -e 'tell application "Music" to get {name} of current track']]
+  local _, result = execute(command)
+  if result == "" then
+    print("Could not get current track")
+    return
+  end
+  return result
 end
 
 ---Get a list of tracks from your Apple Music library
