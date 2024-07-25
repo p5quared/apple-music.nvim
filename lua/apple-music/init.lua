@@ -213,7 +213,7 @@ end
 ---NOTE: Below Sonoma it'll be loved.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-  local current_track = M.get_current_track()
+  local current_track = M.get_current_trackname()
   if not current_track then
     return
   end
@@ -224,7 +224,7 @@ end
 ---NOTE: Below Sonoma it'll be unloved.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-  local current_track = M.get_current_track()
+  local current_track = M.get_current_trackname()
   if not current_track then
     return
   end
@@ -380,8 +380,8 @@ M.select_album_telescope = function()
 end
 
 ---Get the name of the current track.
----@usage require('apple-music').get_current_track()
-M.get_current_track = function()
+---@usage require('apple-music').get_current_trackname()
+M.get_current_trackname = function()
   local command = [[osascript -e 'tell application "Music" to get {name} of current track']]
   local _, result = execute(command)
   if result == "" then
