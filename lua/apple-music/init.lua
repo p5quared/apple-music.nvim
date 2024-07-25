@@ -45,32 +45,32 @@ local execute = function(cmd)
 end
 
 local grab_major_os_version = function()
-  local command = [[ osascript -e 'set osver to system version of (system info)' ]]
-  local _, result = execute(command)
-  return tonumber(result:match("%d+"))
+	local command = [[ osascript -e 'set osver to system version of (system info)' ]]
+	local _, result = execute(command)
+	return tonumber(result:match("%d+"))
 end
 
 ---Change the favorited state of a track.
 ---@param track string
 ---@param state boolean
 local set_favorite_track_by_name = function(track, state)
-  local command_property = "favorited"
-  -- Before version 14 (Sonoma) the property was called `loved`
-  if grab_major_os_version() < 14 then
-    command_property = "loved"
-  end
-  local command = string.format(
-    [[ osascript -e 'tell application "Music" to set %s of track "%s" to "%s"' ]],
-    command_property,
-    track,
-    state
-  )
-  execute(command)
-  if state then
-    print("Favorited track: '" .. track .. "'")
-  else
-    print("Unfavorited track: '" .. track .. "'")
-  end
+	local command_property = "favorited"
+	-- Before version 14 (Sonoma) the property was called `loved`
+	if grab_major_os_version() < 14 then
+		command_property = "loved"
+	end
+	local command = string.format(
+		[[ osascript -e 'tell application "Music" to set %s of track "%s" to "%s"' ]],
+		command_property,
+		track,
+		state
+	)
+	execute(command)
+	if state then
+		print("Favorited track: '" .. track .. "'")
+	else
+		print("Unfavorited track: '" .. track .. "'")
+	end
 end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
@@ -213,22 +213,22 @@ end
 ---NOTE: Below Sonoma it'll be loved.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-  local current_track = M.get_current_trackname()
-  if not current_track then
-    return
-  end
-  set_favorite_track_by_name(current_track, true)
+	local current_track = M.get_current_trackname()
+	if not current_track then
+		return
+	end
+	set_favorite_track_by_name(current_track, true)
 end
 
 ---Unfavorite current track.
 ---NOTE: Below Sonoma it'll be unloved.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-  local current_track = M.get_current_trackname()
-  if not current_track then
-    return
-  end
-  set_favorite_track_by_name(current_track, false)
+	local current_track = M.get_current_trackname()
+	if not current_track then
+		return
+	end
+	set_favorite_track_by_name(current_track, false)
 end
 
 ---Toggle shuffle
@@ -382,13 +382,13 @@ end
 ---Get the name of the current track.
 ---@usage require('apple-music').get_current_trackname()
 M.get_current_trackname = function()
-  local command = [[osascript -e 'tell application "Music" to get {name} of current track']]
-  local _, result = execute(command)
-  if result == "" then
-    print("Could not get current track")
-    return
-  end
-  return vim.trim(result)
+	local command = [[osascript -e 'tell application "Music" to get {name} of current track']]
+	local _, result = execute(command)
+	if result == "" then
+		print("Could not get current track")
+		return
+	end
+	return vim.trim(result)
 end
 
 ---Get a list of tracks from your Apple Music library
