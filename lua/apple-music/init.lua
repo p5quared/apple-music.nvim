@@ -53,7 +53,7 @@ end
 ---Change the favorited state of a track.
 ---@param track string
 ---@param state boolean
-local set_favorite_track_by_name = function(track, state)
+local set_track_favorited_state = function(track, state)
 	local command_property = "favorited"
 	-- Before version 14 (Sonoma) the property was called `loved`
 	if grab_major_os_version() < 14 then
@@ -217,7 +217,7 @@ M.favorite_current_track = function()
 	if not current_track then
 		return
 	end
-	set_favorite_track_by_name(current_track, true)
+	set_track_favorited_state(current_track, true)
 end
 
 ---Unfavorite current track.
@@ -228,7 +228,7 @@ M.unfavorite_current_track = function()
 	if not current_track then
 		return
 	end
-	set_favorite_track_by_name(current_track, false)
+	set_track_favorited_state(current_track, false)
 end
 
 ---Toggle shuffle
