@@ -102,6 +102,8 @@ end
 ---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
+	-- Escape tracks that have single quotes in their name
+	local escaped_track = track:gsub("'", "'\\''")
 	local command = string.format([[
         osascript -e '
         tell application "Music"
