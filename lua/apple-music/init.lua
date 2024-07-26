@@ -44,6 +44,11 @@ local execute = function(cmd)
 	return pcall(exe, cmd)
 end
 
+--- Escape single and double quotes from names
+local sanitize_name = function(name)
+	return name:gsub("'", "'\\''"):gsub('"', '\\"')
+end
+
 local grab_major_os_version = function()
 	local command = [[ osascript -e 'set osver to system version of (system info)' ]]
 	local _, result = execute(command)
