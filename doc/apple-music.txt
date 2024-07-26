@@ -66,6 +66,18 @@ M.disable_shuffle()                                          *M.disable_shuffle*
     @usage require('apple-music').disable_shuffle()
 
 
+M.favorite_current_track()                            *M.favorite_current_track*
+    Favorite current (playing) track.
+    NOTE: Below macOS 14 (Sonoma), it'll be `loved`.
+    @usage require('apple-music').favorite_current_track()
+
+
+M.unfavorite_current_track()                        *M.unfavorite_current_track*
+    Unfavorite current (playing) track.
+    NOTE: Below macOS 14 (Sonoma), it'll be un-`loved`.
+    @usage require('apple-music').unfavorite_current_track()
+
+
 M.toggle_shuffle()                                            *M.toggle_shuffle*
     Toggle shuffle
     @usage require('apple-music').toggle_shuffle()
