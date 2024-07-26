@@ -75,10 +75,12 @@ local set_track_favorited_state = function(track, state)
 	if grab_major_os_version() < 14 then
 		command_property = "loved"
 	end
+
+	local sanitized_trackname = sanitize_name(track)
 	local command = string.format(
 		[[ osascript -e 'tell application "Music" to set %s of track "%s" to "%s"' ]],
 		command_property,
-		track,
+		sanitized_trackname,
 		state
 	)
 	execute(command)
@@ -91,8 +93,6 @@ end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
-
----NOTE: Requires the song to be an exact title (not fuzzy)
 
 ---Setup the plugin
 ---@param opts table|nil: Optional configuration for the plugin
@@ -107,14 +107,14 @@ end
 ---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
-	-- Escape tracks that have single quotes in their name
-	local escaped_track = track:gsub("'", "'\\''")
+
+	local sanitized = sanitize_name(track)
 	local command = string.format([[
         osascript -e '
         tell application "Music"
             play track "%s"
         end tell'
-    ]], track)
+    ]], sanitized)
 
 	local result = execute(command)
 end
@@ -123,17 +123,16 @@ end
 ---@param playlist string: The name of the playlist to play
 ---@usage require('apple-music').play_playlist("Slow Dance")
 M.play_playlist = function(playlist)
+	print("Playing playlist: " .. playlist)
+
+	local sanitized = sanitize_name(playlist)
 	local cmd = string.format([[
 		osascript -e '
 			tell application "Music" to play playlist "%s"
 		end'
-	]], playlist)
+	]], sanitized)
 
-	if execute(cmd) then
-		print("Playing playlist: " .. playlist)
-	else
-		print("Failed to play playlist: " .. playlist)
-	end
+	execute(cmd)
 end
 
 ---Play an album by name
@@ -141,6 +140,9 @@ end
 ---@param album string: The name of the album to play
 ---@usage require('apple-music').play_album("Nashville Skyline")
 M.play_album = function(album)
+	print("Playing album: " .. album)
+
+	local sanitized = sanitize_name(album)
 	local command = string.format([[
         osascript -e '
         tell application "Music"
@@ -151,13 +153,9 @@ M.play_album = function(album)
             end repeat
             play tempPlaylist
         end tell'
-    ]], M.temp_playlist_name, album)
+    ]], M.temp_playlist_name, sanitized)
 
-	if execute(command) then
-		print("Playing album: " .. album)
-	else
-		print("Failed to play album: " .. album)
-	end
+	execute(command)
 end
 
 ---Play the next track
