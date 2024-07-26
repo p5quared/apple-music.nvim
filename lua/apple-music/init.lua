@@ -50,7 +50,18 @@ local grab_major_os_version = function()
 	return tonumber(result:match("%d+"))
 end
 
----Change the favorited state of a track.
+---Get the name of the current (playing) track.
+local get_current_trackname = function()
+	local command = [[osascript -e 'tell application "Music" to get name of current track']]
+	local _, result = execute(command)
+	if result == "" then
+		print("Could not get current track")
+		return
+	end
+	return vim.trim(result)
+end
+
+---Set the favorited/loved state of a track.
 ---@param track string
 ---@param state boolean
 local set_track_favorited_state = function(track, state)
@@ -209,22 +220,22 @@ M.disable_shuffle = function()
 	end
 end
 
----Favorite current track.
----NOTE: Below Sonoma it'll be loved.
+---Favorite current (playing) track.
+---NOTE: Below macOS 14 (Sonoma), it'll be `loved`.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-	local current_track = M.get_current_trackname()
+	local current_track = get_current_trackname()
 	if not current_track then
 		return
 	end
 	set_track_favorited_state(current_track, true)
 end
 
----Unfavorite current track.
----NOTE: Below Sonoma it'll be unloved.
+---Unfavorite current (playing) track.
+---NOTE: Below macOS 14 (Sonoma), it'll be un-`loved`.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-	local current_track = M.get_current_trackname()
+	local current_track = get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -377,18 +388,6 @@ M.select_album_telescope = function()
 			return true
 		end,
 	}):find()
-end
-
----Get the name of the current track.
----@usage require('apple-music').get_current_trackname()
-M.get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get {name} of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		print("Could not get current track")
-		return
-	end
-	return vim.trim(result)
 end
 
 ---Get a list of tracks from your Apple Music library
