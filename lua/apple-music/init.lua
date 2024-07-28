@@ -46,7 +46,7 @@ end
 
 --- Escape single and double quotes from names
 local sanitize_name = function(name)
-	return name:gsub("'", "'\\''"):gsub('"', '\\"')
+	return name:gsub("\\", "\\\\"):gsub("'", "'\\''"):gsub('"', '\\"')
 end
 
 local grab_major_os_version = function()
