@@ -103,7 +103,7 @@ M.setup = function(opts)
 end
 
 ---Play a track by title
----@param track string: The title of the track to play asldfjklajlsdkjflaskdfing: The title of the track to play
+---@param track string: The title of the track to play asldfjklajlsdkjflaskd
 ---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
