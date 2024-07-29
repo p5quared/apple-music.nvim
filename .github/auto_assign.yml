@@ -1,7 +1,7 @@
-reviewers:
-  - p5quared
-
 addReviewers: true
 addAssignees: author
+
+reviewers:
+  - p5quared
 
 numberOfReviewers: 1
