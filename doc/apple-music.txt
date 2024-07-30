@@ -78,6 +78,12 @@ M.unfavorite_current_track()                        *M.unfavorite_current_track*
     @usage require('apple-music').unfavorite_current_track()
 
 
+M.toggle_favorite_current_track()              *M.toggle_favorite_current_track*
+    Toggle favorite for current (playing) track.
+    NOTE: Below macOS 14 (Sonoma), it'll toggle `loved`.
+    @usage require('apple-music').toggle_favorite_current_track()
+
+
 M.toggle_shuffle()                                            *M.toggle_shuffle*
     Toggle shuffle
     @usage require('apple-music').toggle_shuffle()
