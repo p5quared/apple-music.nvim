@@ -66,6 +66,20 @@ local get_current_trackname = function()
 	return vim.trim(result)
 end
 
+---Returns whether the provided track is favorited/loved.
+---@param track string
+local get_favorited_state_of_track = function(track)
+	local command_property = "favorited"
+	-- Before version 14 (Sonoma) the property was called `loved`
+	if grab_major_os_version() < 14 then
+		command_property = "loved"
+	end
+	local command =
+		string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
+	local _, result = execute(command)
+	return vim.trim(result) == "true"
+end
+
 ---Set the favorited/loved state of a track.
 ---@param track string
 ---@param state boolean
@@ -245,6 +259,18 @@ M.unfavorite_current_track = function()
 		return
 	end
 	set_track_favorited_state(current_track, false)
+end
+
+---Toggle favorite for current (playing) track.
+---NOTE: Below macOS 14 (Sonoma), it'll toggle `loved`.
+---@usage require('apple-music').toggle_favorite_current_track()
+M.toggle_favorite_current_track = function()
+	local current_track = get_current_trackname()
+	if not current_track then
+		return
+	end
+	local is_favorited = get_favorited_state_of_track(current_track)
+	set_track_favorited_state(current_track, not is_favorited)
 end
 
 ---Toggle shuffle
