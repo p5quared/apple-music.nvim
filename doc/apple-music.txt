@@ -41,6 +41,11 @@ M.previous_track()                                            *M.previous_track*
     @usage require('apple-music').previous_track()
 
 
+M.restart_track()                                              *M.restart_track*
+    Restart the current track
+    @usage require('apple-music').restart_track()
+
+
 M.toggle_play()                                                  *M.toggle_play*
     Toggle playback (play/pause)
     @usage require('apple-music').toggle_play()
