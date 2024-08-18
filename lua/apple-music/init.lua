@@ -186,6 +186,13 @@ M.previous_track = function()
 	print("Apple Music: Previous Track")
 end
 
+---Restart the current track
+---@usage require('apple-music').restart_track()
+M.restart_track = function()
+	am_run("set player position to 0")
+	print("Apple Music: Restarted Track")
+end
+
 ---Toggle playback (play/pause)
 ---@usage require('apple-music').toggle_play()
 M.toggle_play = function()
