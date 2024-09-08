@@ -84,6 +84,7 @@ This plugin is released under the MIT License. See [LICENSE](./LICENSE) for more
 ## Contributions
 
 Contributions are welcome! Please feel free to open issues or submit pull requests on GitHub.
+Before opening pull requests, please run `stylua` locally.
 
 ## Acknowledgements
 
