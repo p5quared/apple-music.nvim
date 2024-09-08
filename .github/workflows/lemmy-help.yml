@@ -19,8 +19,6 @@ jobs:
           curl -Lq https://github.com/numToStr/lemmy-help/releases/latest/download/lemmy-help-x86_64-unknown-linux-gnu.tar.gz | tar xz
           ./lemmy-help lua/apple-music/init.lua > doc/apple-music.txt
           rm -rf lemmy-help
-
-
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
         with:
@@ -31,3 +29,27 @@ jobs:
             It updates the vimdoc documentation in the `doc/` directory.
           branch: auto-update-vimdoc
           delete-branch: true
+
+  formatting:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: JohnnyMorganz/stylua-action@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        version: latest 
+        args: .
+
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v6
+      with:
+        commit-message: "chore(formatting): auto-format stylua"
+        title: "Stylua Formatting"
+        body: |
+          This PR is automatically created by the lemmy-help GitHub Action.
+          It formats all lua files with the default Stylua configuration.
+        branch: auto-format-stylua
+        delete-branch: true
