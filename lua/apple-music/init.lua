@@ -114,6 +114,11 @@ local M = {}
 --- 								(see `apple-music.caveats` for details on temporary playlists)
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
+	vim.api.nvim_create_autocmd("VimLeave", {
+		callback = function()
+			M.cleanup_all()
+		end
+	})
 end
 
 ---Play a track by title
