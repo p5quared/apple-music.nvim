@@ -99,9 +99,6 @@ M.shuffle_is_enabled()                                    *M.shuffle_is_enabled*
     @usage require('apple-music').shuffle_is_enabled()
 
 
-M._cleanup()                                                        *M._cleanup*
-
-
 M.cleanup()                                                          *M.cleanup*
     Delete temporary playlist. See `apple-music.caveats` for details.
     You may have to call this multiple times to remove all temporary playlists.
@@ -109,8 +106,8 @@ M.cleanup()                                                          *M.cleanup*
 
 
 M.cleanup_all()                                                  *M.cleanup_all*
-    Cleanup all temporary playlists, as long as you have less than 10...
-    You may still have to call this multiple times.
+    Cleanup 10 temporary playlists.
+    I haven't found a clean way to delete all n temporary playlists at once.
     There may be weird text written to your screen, but restarting neovim will fix this.
     @usage require('apple-music').cleanup_all()
 
