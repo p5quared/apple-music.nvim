@@ -313,7 +313,7 @@ M.shuffle_is_enabled = function()
 	return is_enabled
 end
 
-M._cleanup = function()
+local _cleanup = function()
 	local cmd = string.format(
 		[[
 		osascript -e '
@@ -336,17 +336,17 @@ end
 ---You may have to call this multiple times to remove all temporary playlists.
 ---@usage require('apple-music').cleanup()
 M.cleanup = function()
-	M._cleanup()
+	_cleanup()
 	print("Apple Music: Cleaned up")
 end
 
----Cleanup all temporary playlists, as long as you have less than 10...
----You may still have to call this multiple times.
+---Cleanup 10 temporary playlists.
+---I haven't found a clean way to delete all n temporary playlists at once.
 ---There may be weird text written to your screen, but restarting neovim will fix this.
 ---@usage require('apple-music').cleanup_all()
 M.cleanup_all = function()
-	for i = 1, 10 do
-		M._cleanup()
+	for _ = 1, 10 do
+		_cleanup()
 	end
 	print("Apple Music: Cleaned up all")
 end
