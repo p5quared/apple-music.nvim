@@ -117,7 +117,7 @@ M.setup = function(opts)
 	vim.api.nvim_create_autocmd("VimLeave", {
 		callback = function()
 			M.cleanup_all()
-		end
+		end,
 	})
 end
 
