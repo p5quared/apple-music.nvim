@@ -75,7 +75,7 @@ local get_favorited_state_of_track = function(track)
 		command_property = "loved"
 	end
 	local command =
-		string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
+			string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
 	local _, result = execute(command)
 	return vim.trim(result) == "true"
 end
@@ -114,6 +114,9 @@ local M = {}
 --- 								(see `apple-music.caveats` for details on temporary playlists)
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
+
+	-- Cleanup temporary playlists on exit
+	-- TODO: Possible improvements by wrapping in pcall
 	vim.api.nvim_create_autocmd("VimLeave", {
 		callback = function()
 			M.cleanup_all()
@@ -378,22 +381,22 @@ M.select_playlist_telescope = function()
 	local playlists = M.get_playlists()
 
 	pickers
-		.new({}, {
-			prompt_title = "Select a playlist to play",
-			finder = finders.new_table({
-				results = playlists,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_playlist(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+			.new({}, {
+				prompt_title = "Select a playlist to play",
+				finder = finders.new_table({
+					results = playlists,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr, map)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						M.play_playlist(selection[1])
+					end)
+					return true
+				end,
+			})
+			:find()
 end
 
 local remove_duplicates = function(t)
@@ -433,22 +436,22 @@ M.select_album_telescope = function()
 	local albums = M.get_albums()
 
 	pickers
-		.new({}, {
-			prompt_title = "Select an album to play",
-			finder = finders.new_table({
-				results = albums,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_album(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+			.new({}, {
+				prompt_title = "Select an album to play",
+				finder = finders.new_table({
+					results = albums,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr, map)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						M.play_album(selection[1])
+					end)
+					return true
+				end,
+			})
+			:find()
 end
 
 ---Get a list of tracks from your Apple Music library
@@ -471,22 +474,22 @@ end
 M.select_track_telescope = function()
 	local tracks = M.get_tracks()
 	pickers
-		.new({}, {
-			prompt_title = "Select a track to play",
-			finder = finders.new_table({
-				results = tracks,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_track(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+			.new({}, {
+				prompt_title = "Select a track to play",
+				finder = finders.new_table({
+					results = tracks,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr, map)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						M.play_track(selection[1])
+					end)
+					return true
+				end,
+			})
+			:find()
 end
 
 return M
