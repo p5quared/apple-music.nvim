@@ -96,6 +96,9 @@ end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
+local last_track = "No track playing"
+local last_update = 0
+local update_interval = 5 -- Update every 5 seconds
 
 ---Setup the plugin
 ---@param opts table|nil: Optional configuration for the plugin
@@ -115,13 +118,18 @@ end
 
 ---Get the name of the current (playing) track.
 M._get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		print("Could not get current track")
-		return
+	local current_time = os.time()
+	if current_time - last_update >= update_interval then
+		local command = [[osascript -e 'tell application "Music" to get name of current track']]
+		local _, result = execute(command)
+		if result == "" then
+			last_track = "No track playing"
+		else
+			last_track = vim.trim(result)
+		end
+		last_update = current_time
 	end
-	return vim.trim(result)
+	return last_track
 end
 
 ---Play a track by title
