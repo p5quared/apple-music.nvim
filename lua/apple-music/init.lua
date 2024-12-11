@@ -116,6 +116,10 @@ M._current_track = "No Track Playing"
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
 
+	local polling_interval = opts.polling_interval or 5000
+	vim.defer_fn(function()
+		vim.loop.new_timer():start(0, polling_interval, vim.schedule_wrap(get_current_trackname()))
+	end, 0)
 	-- Cleanup temporary playlists on exit
 	-- TODO: Possible improvements by wrapping in pcall
 	vim.api.nvim_create_autocmd("VimLeave", {
