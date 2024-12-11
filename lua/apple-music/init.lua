@@ -55,6 +55,16 @@ local grab_major_os_version = function()
 	return tonumber(result:match("%d+"))
 end
 
+---Get the name of the current (playing) track.
+local get_current_trackname = function()
+	local command = [[osascript -e 'tell application "Music" to get name of current track']]
+	local _, result = execute(command)
+	if result == "" then
+		return
+	end
+	return vim.trim(result)
+end
+
 ---Returns whether the provided track is favorited/loved.
 ---@param track string
 local get_favorited_state_of_track = function(track)
@@ -92,16 +102,6 @@ local set_track_favorited_state = function(track, state)
 	else
 		print("Unfavorited track: '" .. track .. "'")
 	end
-end
-
----Get the name of the current (playing) track.
-local get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		return
-	end
-	return vim.trim(result)
 end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
@@ -271,7 +271,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be `loved`.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-	local current_track = M.set_current_trackname()
+	local current_track = get_current_trackname()
 	if not current_track then
 		return
 	end
