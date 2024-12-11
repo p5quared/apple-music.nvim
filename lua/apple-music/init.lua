@@ -108,7 +108,7 @@ M.setup = function(opts)
 
 	local polling_interval = opts.polling_interval or 5000
 	local timer = vim.uv.new_timer()
-	timer:start(0, polling_interval, vim.schedule_wrap(get_current_trackname))
+	timer:start(0, polling_interval, vim.schedule_wrap(M.get_current_trackname))
 
 	-- Cleanup temporary playlists on exit
 	-- TODO: Possible improvements by wrapping in pcall
@@ -123,17 +123,22 @@ M.setup = function(opts)
 end
 
 ---Get the name of the current (playing) track.
-local get_current_trackname = function()
+M.get_current_trackname = function()
 	local command = [[osascript -e 'tell application "Music" to get name of current track']]
 	local _, result = execute(command)
 	if result == "" or result == nil then
-		M._current_track = "No Track Playing"
+		if M._current_track ~= "No Track Playing" then
+			M._current_track = "No Track Playing"
+		end
 		return
 	end
-	M._current_track = vim.trim(result)
-	return vim.trim(result)
-end
 
+	local new_track = vim.trim(result)
+	if new_track ~= M._current_track then
+		M._current_track = new_track
+	end
+	return new_track
+end
 ---Play a track by title
 ---@param track string: The title of the track to play
 ---@usage require('apple-music').play_track("Sir Duke")
