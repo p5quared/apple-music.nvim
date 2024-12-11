@@ -126,9 +126,9 @@ end
 local get_current_trackname = function()
 	local command = [[osascript -e 'tell application "Music" to get name of current track']]
 	local _, result = execute(command)
-	if result == "" then
+	if result == "" or result == nil then
 		M._current_track = "No Track Playing"
-		return "No Track Playing"
+		return
 	end
 	M._current_track = vim.trim(result)
 	return vim.trim(result)
