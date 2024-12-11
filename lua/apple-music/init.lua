@@ -94,6 +94,17 @@ local set_track_favorited_state = function(track, state)
 	end
 end
 
+---Get the name of the current (playing) track.
+local get_current_trackname = function()
+	local command = [[osascript -e 'tell application "Music" to get name of current track']]
+	local _, result = execute(command)
+	if result == "" then
+		print("Could not get current track")
+		return
+	end
+	return vim.trim(result)
+end
+
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
 
@@ -113,15 +124,8 @@ M.setup = function(opts)
 	})
 end
 
----Get the name of the current (playing) track.
-M._get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		print("Could not get current track")
-		return
-	end
-	return vim.trim(result)
+M._current_track = function()
+	return get_current_trackname()
 end
 
 ---Play a track by title
@@ -129,6 +133,7 @@ end
 ---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
+	M._current_track = track
 
 	local sanitized = sanitize_name(track)
 	local command = string.format(
@@ -161,6 +166,7 @@ M.play_playlist = function(playlist)
 	)
 
 	execute(cmd)
+	M._current_track = get_current_trackname()
 end
 
 ---Play an album by name
@@ -188,6 +194,7 @@ M.play_album = function(album)
 	)
 
 	execute(command)
+	M._current_track = get_current_trackname()
 end
 
 ---Play the next track
@@ -279,7 +286,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be un-`loved`.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-	local current_track = M._get_current_trackname()
+	local current_track = get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -290,7 +297,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll toggle `loved`.
 ---@usage require('apple-music').toggle_favorite_current_track()
 M.toggle_favorite_current_track = function()
-	local current_track = M._get_current_trackname()
+	local current_track = get_current_trackname()
 	if not current_track then
 		return
 	end
