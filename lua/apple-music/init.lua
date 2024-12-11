@@ -55,16 +55,6 @@ local grab_major_os_version = function()
 	return tonumber(result:match("%d+"))
 end
 
----Get the name of the current (playing) track.
-local get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		return "No Track Playing"
-	end
-	return vim.trim(result)
-end
-
 ---Returns whether the provided track is favorited/loved.
 ---@param track string
 local get_favorited_state_of_track = function(track)
@@ -106,6 +96,7 @@ end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
+
 M._current_track = "No Track Playing"
 
 ---Setup the plugin
@@ -129,6 +120,18 @@ M.setup = function(opts)
 			M.cleanup_all()
 		end,
 	})
+end
+
+---Get the name of the current (playing) track.
+local get_current_trackname = function()
+	local command = [[osascript -e 'tell application "Music" to get name of current track']]
+	local _, result = execute(command)
+	if result == "" then
+		M._current_track = "No Track Playing"
+		return "No Track Playing"
+	end
+	M._current_track = vim.trim(result)
+	return vim.trim(result)
 end
 
 ---Play a track by title
