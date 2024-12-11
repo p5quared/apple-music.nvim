@@ -17,35 +17,24 @@ local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local Job = require("plenary.job")
 
-local function execute_async(script, callback)
-	Job:new({
-		command = "osascript",
-		args = { "-e", script },
-		on_exit = function(j, return_val)
-			if return_val ~= 0 then
-				vim.schedule(function()
-					vim.notify(string.format("AppleScript exited with code %d", return_val), vim.log.levels.ERROR)
-				end)
-				callback("No Track Playing")
-				return
-			end
-		end,
-		on_stdout = function(_, data)
-			if data then
-				callback(vim.trim(data))
-			else
-				callback("No Track Playing")
-			end
-		end,
-		on_stderr = function(_, data)
-			if data then
-				vim.schedule(function()
-					vim.notify("AppleScript Error: " .. data, vim.log.levels.ERROR)
-				end)
-			end
-		end,
-	}):start()
+local function execute_async(cmd, callback)
+	-- Define the function that will run in a separate thread
+	local function thread_func(cmd, callback)
+		-- Execute the AppleScript command
+		local handle = io.popen(cmd)
+		if handle then
+			local result = handle:read("*a")
+			handle:close()
+			callback(vim.trim(result))
+		else
+			callback("No Track Playing")
+		end
+	end
+
+	-- Start the thread
+	vim.uv.new_thread(thread_func, cmd, callback)
 end
+
 local function execute_applescript(script)
 	local command = "osascript -e '" .. script .. "'"
 	local handle = io.popen(command)
