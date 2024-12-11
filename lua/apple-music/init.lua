@@ -15,7 +15,37 @@ local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+local Job = require("plenary.job")
 
+local function execute_async(script, callback)
+	Job:new({
+		command = "osascript",
+		args = { "-e", script },
+		on_exit = function(j, return_val)
+			if return_val ~= 0 then
+				vim.schedule(function()
+					vim.notify(string.format("AppleScript exited with code %d", return_val), vim.log.levels.ERROR)
+				end)
+				callback("No Track Playing")
+				return
+			end
+		end,
+		on_stdout = function(_, data)
+			if data then
+				callback(vim.trim(data))
+			else
+				callback("No Track Playing")
+			end
+		end,
+		on_stderr = function(_, data)
+			if data then
+				vim.schedule(function()
+					vim.notify("AppleScript Error: " .. data, vim.log.levels.ERROR)
+				end)
+			end
+		end,
+	}):start()
+end
 local function execute_applescript(script)
 	local command = "osascript -e '" .. script .. "'"
 	local handle = io.popen(command)
@@ -125,19 +155,19 @@ end
 ---Get the name of the current (playing) track.
 M.get_current_trackname = function()
 	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" or result == nil then
-		if M._current_track ~= "No Track Playing" then
-			M._current_track = "No Track Playing"
+	execute_async(command, function(result)
+		if result == "" or result == "No Track Playing" then
+			if M._current_track ~= "No Track Playing" then
+				M._current_track = "No Track Playing"
+			end
+			return
 		end
-		return
-	end
 
-	local new_track = vim.trim(result)
-	if new_track ~= M._current_track then
-		M._current_track = new_track
-	end
-	return new_track
+		local new_track = vim.trim(result)
+		if new_track ~= M._current_track then
+			M._current_track = new_track
+		end
+	end)
 end
 
 ---Play a track by title
