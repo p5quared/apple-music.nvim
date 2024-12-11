@@ -106,7 +106,7 @@ M._current_track = "No Track Playing"
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
 
-	local polling_interval = opts.polling_interval or 5000
+	local polling_interval = opts.polling_interval or 1000
 	local timer = vim.uv.new_timer()
 	timer:start(0, polling_interval, vim.schedule_wrap(M.get_current_trackname))
 
@@ -139,6 +139,7 @@ M.get_current_trackname = function()
 	end
 	return new_track
 end
+
 ---Play a track by title
 ---@param track string: The title of the track to play
 ---@usage require('apple-music').play_track("Sir Duke")
@@ -177,7 +178,7 @@ M.play_playlist = function(playlist)
 	)
 
 	execute(cmd)
-	M._current_track = get_current_trackname()
+	M._current_track = M.get_current_trackname()
 end
 
 ---Play an album by name
@@ -205,7 +206,7 @@ M.play_album = function(album)
 	)
 
 	execute(command)
-	M._current_track = get_current_trackname()
+	M._current_track = M.get_current_trackname()
 end
 
 ---Play the next track
@@ -286,7 +287,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be `loved`.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -297,7 +298,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be un-`loved`.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -308,7 +309,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll toggle `loved`.
 ---@usage require('apple-music').toggle_favorite_current_track()
 M.toggle_favorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
