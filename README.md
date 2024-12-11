@@ -67,8 +67,9 @@ To play a specific track, you can use the following command in Neovim:
 
 To open the Telescope picker and select a playlist to play:
 
-````vim
+```vim
 :lua require('apple-music').select_playlist_telescope()
+```
 
 ### Example (lualine)
 
@@ -84,7 +85,7 @@ require('lualine').setup {
     }
   }
 }
-````
+```
 
 ## License
 
