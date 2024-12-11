@@ -23,22 +23,12 @@ local function execute_async(script, callback)
 		args = { "-e", script },
 		on_exit = function(j, return_val)
 			if return_val ~= 0 then
-				vim.schedule(function()
-					vim.notify(string.format("AppleScript exited with code %d", return_val), vim.log.levels.ERROR)
-				end)
 				callback("No Track Playing")
 				return
 			end
 
 			local result = table.concat(j:result(), "\n")
 			callback(vim.trim(result))
-		end,
-		on_stderr = function(_, data)
-			if data and data ~= "" then
-				vim.schedule(function()
-					vim.notify("AppleScript Error: " .. data, vim.log.levels.ERROR)
-				end)
-			end
 		end,
 	}):start()
 end
