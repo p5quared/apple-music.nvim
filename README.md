@@ -67,9 +67,24 @@ To play a specific track, you can use the following command in Neovim:
 
 To open the Telescope picker and select a playlist to play:
 
-```vim
+````vim
 :lua require('apple-music').select_playlist_telescope()
-```
+
+### Example (lualine)
+
+This example demonstrates how to integrate with lualine.
+Other statusline plugins can be used as well, and the process should be similar.
+Refer to the documentation of your statusline plugin for more information.
+
+```lua
+require('lualine').setup {
+  sections = {
+    lualine_x = {
+      require("apple-music")._current_track,
+    }
+  }
+}
+````
 
 ## License
 
@@ -84,8 +99,8 @@ Before opening pull requests, please run `stylua` locally.
 
 - [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [mcthomas/Apple-Music-CLI-Player](https://github.com/mcthomas/Apple-Music-CLI-Player)
-    - Much of the Apple Script was taken/heavily inspired from this repo.
+  - Much of the Apple Script was taken/heavily inspired from this repo.
     I probably could have pieced together a lot of the basic stuff, but probably
     not the workaround for playing albums with temporary playlists...
 - [Temporary Playlist Workaround](https://discussions.apple.com/thread/1053355?sortBy=best)
-    - Well that temp playlist workaround from mcthomas was actually from here.
+  - Well that temp playlist workaround from mcthomas was actually from here.
