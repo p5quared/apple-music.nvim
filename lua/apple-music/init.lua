@@ -15,6 +15,23 @@ local conf = require("telescope.config").values
 local finders = require("telescope.finders")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
+local Job = require("plenary.job")
+
+local function execute_async(script, callback)
+	Job:new({
+		command = "osascript",
+		args = { "-e", script },
+		on_exit = function(j, return_val)
+			if return_val ~= 0 then
+				callback("No Track Playing")
+				return
+			end
+
+			local result = table.concat(j:result(), "\n")
+			callback(vim.trim(result))
+		end,
+	}):start()
+end
 
 local function execute_applescript(script)
 	local command = "osascript -e '" .. script .. "'"
@@ -53,17 +70,6 @@ local grab_major_os_version = function()
 	local command = [[ osascript -e 'set osver to system version of (system info)' ]]
 	local _, result = execute(command)
 	return tonumber(result:match("%d+"))
-end
-
----Get the name of the current (playing) track.
-local get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
-	local _, result = execute(command)
-	if result == "" then
-		print("Could not get current track")
-		return
-	end
-	return vim.trim(result)
 end
 
 ---Returns whether the provided track is favorited/loved.
@@ -108,6 +114,8 @@ end
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
 
+M._current_track = "No Track Playing"
+
 ---Setup the plugin
 ---@param opts table|nil: Optional configuration for the plugin
 --- * {temp_playlist_name: string} - The name of the temporary playlist to use
@@ -115,13 +123,38 @@ local M = {}
 M.setup = function(opts)
 	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
 
+	local polling_interval = opts.polling_interval or 1000
+	local timer = vim.uv.new_timer()
+	timer:start(0, polling_interval, vim.schedule_wrap(M.get_current_trackname))
+
 	-- Cleanup temporary playlists on exit
 	-- TODO: Possible improvements by wrapping in pcall
 	vim.api.nvim_create_autocmd("VimLeave", {
 		callback = function()
+			timer:stop()
+			timer:close()
+			timer = nil
 			M.cleanup_all()
 		end,
 	})
+end
+
+---Get the name of the current (playing) track.
+M.get_current_trackname = function()
+	local command = 'tell application "Music" to get name of current track'
+	execute_async(command, function(result)
+		if result == "" or result == "No Track Playing" then
+			if M._current_track ~= "No Track Playing" then
+				M._current_track = "No Track Playing"
+			end
+			return
+		end
+
+		local new_track = vim.trim(result)
+		if new_track ~= M._current_track then
+			M._current_track = new_track
+		end
+	end)
 end
 
 ---Play a track by title
@@ -129,6 +162,7 @@ end
 ---@usage require('apple-music').play_track("Sir Duke")
 M.play_track = function(track)
 	print("Playing " .. track)
+	M._current_track = track
 
 	local sanitized = sanitize_name(track)
 	local command = string.format(
@@ -161,6 +195,7 @@ M.play_playlist = function(playlist)
 	)
 
 	execute(cmd)
+	M._current_track = M.get_current_trackname()
 end
 
 ---Play an album by name
@@ -188,6 +223,7 @@ M.play_album = function(album)
 	)
 
 	execute(command)
+	M._current_track = M.get_current_trackname()
 end
 
 ---Play the next track
@@ -268,7 +304,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be `loved`.
 ---@usage require('apple-music').favorite_current_track()
 M.favorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -279,7 +315,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll be un-`loved`.
 ---@usage require('apple-music').unfavorite_current_track()
 M.unfavorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
@@ -290,7 +326,7 @@ end
 ---NOTE: Below macOS 14 (Sonoma), it'll toggle `loved`.
 ---@usage require('apple-music').toggle_favorite_current_track()
 M.toggle_favorite_current_track = function()
-	local current_track = get_current_trackname()
+	local current_track = M.get_current_trackname()
 	if not current_track then
 		return
 	end
