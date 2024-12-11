@@ -19,7 +19,7 @@ local Job = require("plenary.job")
 
 local function execute_async(script, callback)
 	Job:new({
-		command = "osascript -e '" .. script .. "'",
+		command = script,
 		on_exit = function(j, return_val)
 			if return_val ~= 0 then
 				vim.schedule(function()
