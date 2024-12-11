@@ -19,7 +19,8 @@ local Job = require("plenary.job")
 
 local function execute_async(script, callback)
 	Job:new({
-		command = script,
+		command = "osascript",
+		args = { "-e", script },
 		on_exit = function(j, return_val)
 			if return_val ~= 0 then
 				vim.schedule(function()
@@ -28,16 +29,12 @@ local function execute_async(script, callback)
 				callback("No Track Playing")
 				return
 			end
-		end,
-		on_stdout = function(_, data)
-			if data then
-				callback(vim.trim(data))
-			else
-				callback("No Track Playing")
-			end
+
+			local result = table.concat(j:result(), "\n")
+			callback(vim.trim(result))
 		end,
 		on_stderr = function(_, data)
-			if data then
+			if data and data ~= "" then
 				vim.schedule(function()
 					vim.notify("AppleScript Error: " .. data, vim.log.levels.ERROR)
 				end)
@@ -154,7 +151,7 @@ end
 
 ---Get the name of the current (playing) track.
 M.get_current_trackname = function()
-	local command = [[osascript -e 'tell application "Music" to get name of current track']]
+	local command = [['tell application "Music" to get name of current track']]
 	execute_async(command, function(result)
 		if result == "" or result == "No Track Playing" then
 			if M._current_track ~= "No Track Playing" then
