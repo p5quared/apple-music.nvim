@@ -107,6 +107,7 @@ end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
+M._current_track = "No Track Playing"
 
 ---Setup the plugin
 ---@param opts table|nil: Optional configuration for the plugin
@@ -122,10 +123,6 @@ M.setup = function(opts)
 			M.cleanup_all()
 		end,
 	})
-end
-
-M._current_track = function()
-	return get_current_trackname()
 end
 
 ---Play a track by title
