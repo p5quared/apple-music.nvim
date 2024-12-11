@@ -99,7 +99,6 @@ local get_current_trackname = function()
 	local command = [[osascript -e 'tell application "Music" to get name of current track']]
 	local _, result = execute(command)
 	if result == "" then
-		print("Could not get current track")
 		return
 	end
 	return vim.trim(result)
@@ -107,7 +106,9 @@ end
 
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
-M._current_track = "No Track Playing"
+M._current_track = function()
+	return get_current_trackname()
+end
 
 ---Setup the plugin
 ---@param opts table|nil: Optional configuration for the plugin
