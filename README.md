@@ -9,7 +9,7 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 - Play specific tracks, playlists, or albums.
 - Control playback (play, pause, next track, previous track, toggle play/pause).
 - Enable or disable shuffle.
-- View and select entries using Telescope picker. (if you don't have Telescope installed, `vim.ui.select` is used instead)
+- View and select entries using a picker. (if you don't have Telescope installed, `vim.ui.select` is used instead)
 
 ## Installation
 
