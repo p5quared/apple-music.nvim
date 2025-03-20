@@ -9,7 +9,7 @@ This Neovim plugin allows you to control Apple Music directly from within Neovim
 - Play specific tracks, playlists, or albums.
 - Control playback (play, pause, next track, previous track, toggle play/pause).
 - Enable or disable shuffle.
-- View and select entries using Telescope picker.
+- View and select entries using Telescope picker. (if you don't have Telescope installed, `vim.ui.select` is used instead)
 
 ## Installation
 
@@ -20,14 +20,15 @@ Here is how I have this plugin setup, minus the dev stuff.
 ```lua
 {
     'p5quared/apple-music.nvim',
-    dependencies = { 'nvim-telescope/telescope.nvim' },
+    -- Optional dependencies
+    -- dependencies = { 'nvim-telescope/telescope.nvim' },
     config = true,
     keys = {
         { "<leader>amp", function() require("apple-music").toggle_play() end,               desc = "Toggle [P]layback" },
         { "<leader>ams", function() require("apple-music").toggle_shuffle() end,            desc = "Toggle [S]huffle" },
-        { "<leader>fp",  function() require("apple-music").select_playlist_telescope() end, desc = "[F]ind [P]laylists" },
-        { "<leader>fa",  function() require("apple-music").select_album_telescope() end,    desc = "[F]ind [A]lbum" },
-        { "<leader>fs",  function() require("apple-music").select_track_telescope() end,    desc = "[F]ind [S]ong" },
+        { "<leader>fp",  function() require("apple-music").select_playlist() end,           desc = "[F]ind [P]laylists" },
+        { "<leader>fa",  function() require("apple-music").select_album() end,              desc = "[F]ind [A]lbum" },
+        { "<leader>fs",  function() require("apple-music").select_track() end,              desc = "[F]ind [S]ong" },
         { "<leader>amx", function() require("apple-music").cleanup_all() end,               desc = "Cleanup Temp Playlists" },
     },
 }
@@ -65,10 +66,10 @@ To play a specific track, you can use the following command in Neovim:
 :lua require('apple-music').play_track("Bohemian Rhapsody")
 ```
 
-To open the Telescope picker and select a playlist to play:
+To open the picker and select a playlist to play:
 
 ```vim
-:lua require('apple-music').select_playlist_telescope()
+:lua require('apple-music').select_playlist()
 ```
 
 ## License
