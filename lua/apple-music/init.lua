@@ -441,4 +441,8 @@ M.select_track = function()
 	picker.pick("Select a track to play", tracks, M.play_track)
 end
 
+M.select_playlist_telescope = M.select_playlist
+M.select_album_telescope = M.select_album
+M.select_track_telescope = M.select_track
+
 return M
