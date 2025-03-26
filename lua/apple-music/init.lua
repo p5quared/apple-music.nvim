@@ -137,7 +137,7 @@ M.play_track = function(track)
 		sanitized
 	)
 
-	local result = execute(command)
+	local _ = execute(command)
 end
 
 ---Play a playlist by name
@@ -332,7 +332,7 @@ M._cleanup = function()
 	)
 
 	local handle = io.popen(cmd)
-	local result = handle:read("*a")
+	local _ = handle:read("*a")
 	handle:close()
 end
 
