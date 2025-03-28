@@ -71,7 +71,7 @@ local get_favorited_state_of_track = function(track)
 		command_property = "loved"
 	end
 	local command =
-			string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
+		string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
 	local _, result = execute(command)
 	return vim.trim(result) == "true"
 end
