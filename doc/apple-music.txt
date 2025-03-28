@@ -120,9 +120,9 @@ M.get_playlists()                                              *M.get_playlists*
     @usage require('apple-music').get_playlists()
 
 
-M.select_playlist_telescope()                      *M.select_playlist_telescope*
-    Select and play a playlist using Telescope
-    @usage require('apple-music').select_playlist_telescope()
+M.select_playlist()                                          *M.select_playlist*
+    Select and play a playlist
+    @usage require('apple-music').select_playlist()
 
 
 M.get_albums()                                                    *M.get_albums*
@@ -130,9 +130,9 @@ M.get_albums()                                                    *M.get_albums*
     @usage require('apple-music').get_albums()
 
 
-M.select_album_telescope()                            *M.select_album_telescope*
-    Select and play an album using Telescope
-    @usage require('apple-music').select_album_telescope()
+M.select_album()                                                *M.select_album*
+    Select and play an album from your library
+    @usage require('apple-music').select_album()
 
 
 M.get_tracks()                                                    *M.get_tracks*
@@ -140,9 +140,9 @@ M.get_tracks()                                                    *M.get_tracks*
     @usage require('apple-music').get_tracks()
 
 
-M.select_track_telescope()                            *M.select_track_telescope*
-    Select and play a track using Telescope
-    @usage require('apple-music').select_track_telescope()
+M.select_track()                                                *M.select_track*
+    Select and play a track from your library
+    @usage require('apple-music').select_track()
 
 
 vim:tw=78:ts=8:noet:ft=help:norl:
