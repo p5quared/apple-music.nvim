@@ -10,11 +10,7 @@
 ---   require('apple-music').play_track("Sir Duke")
 ---<
 ---@brief ]]
-local pickers = require("telescope.pickers")
-local conf = require("telescope.config").values
-local finders = require("telescope.finders")
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
+local picker = require("apple-music.picker")
 
 local function execute_applescript(script)
 	local command = "osascript -e '" .. script .. "'"
@@ -75,7 +71,7 @@ local get_favorited_state_of_track = function(track)
 		command_property = "loved"
 	end
 	local command =
-		string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
+			string.format([[osascript -e 'tell application "Music" to get %s of track "%s"']], command_property, track)
 	local _, result = execute(command)
 	return vim.trim(result) == "true"
 end
@@ -141,7 +137,7 @@ M.play_track = function(track)
 		sanitized
 	)
 
-	local result = execute(command)
+	local _ = execute(command)
 end
 
 ---Play a playlist by name
@@ -336,7 +332,7 @@ M._cleanup = function()
 	)
 
 	local handle = io.popen(cmd)
-	local result = handle:read("*a")
+	local _ = handle:read("*a")
 	handle:close()
 end
 
@@ -376,27 +372,11 @@ M.get_playlists = function()
 end
 
 ---Select and play a playlist using Telescope
----@usage require('apple-music').select_playlist_telescope()
-M.select_playlist_telescope = function()
+---@usage require('apple-music').select_playlist()
+M.select_playlist = function()
 	local playlists = M.get_playlists()
 
-	pickers
-		.new({}, {
-			prompt_title = "Select a playlist to play",
-			finder = finders.new_table({
-				results = playlists,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_playlist(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+	picker.pick("Select a playlist to play", playlists, M.play_playlist)
 end
 
 local remove_duplicates = function(t)
@@ -431,27 +411,11 @@ M.get_albums = function()
 end
 
 ---Select and play an album using Telescope
----@usage require('apple-music').select_album_telescope()
-M.select_album_telescope = function()
+---@usage require('apple-music').select_album()
+M.select_album = function()
 	local albums = M.get_albums()
 
-	pickers
-		.new({}, {
-			prompt_title = "Select an album to play",
-			finder = finders.new_table({
-				results = albums,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_album(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+	picker.pick("Select an album to play", albums, M.play_album)
 end
 
 ---Get a list of tracks from your Apple Music library
@@ -470,26 +434,15 @@ M.get_tracks = function()
 end
 
 ---Select and play a track using Telescope
----@usage require('apple-music').select_track_telescope()
-M.select_track_telescope = function()
+---@usage require('apple-music').select_track()
+M.select_track = function()
 	local tracks = M.get_tracks()
-	pickers
-		.new({}, {
-			prompt_title = "Select a track to play",
-			finder = finders.new_table({
-				results = tracks,
-			}),
-			sorter = conf.generic_sorter({}),
-			attach_mappings = function(prompt_bufnr, map)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					M.play_track(selection[1])
-				end)
-				return true
-			end,
-		})
-		:find()
+
+	picker.pick("Select a track to play", tracks, M.play_track)
 end
+
+M.select_playlist_telescope = M.select_playlist
+M.select_album_telescope = M.select_album
+M.select_track_telescope = M.select_track
 
 return M
