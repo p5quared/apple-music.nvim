@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0](https://github.com/p5quared/apple-music.nvim/compare/v1.3.0...v1.4.0) (2025-03-28)
+
+
+### Features
+
+* add back the `_telescope` functions ([38c738b](https://github.com/p5quared/apple-music.nvim/commit/38c738bc3e63858d4c027fea58becde1ead811c5))
+* make telescope optional ([9ab407f](https://github.com/p5quared/apple-music.nvim/commit/9ab407fea2c1921791815c20d4bc1b074062e138))
+* make telescope optional ([758f41a](https://github.com/p5quared/apple-music.nvim/commit/758f41a8d3481c202a1b716f5e010a1a0baec808))
+
 ## [1.3.0](https://github.com/p5quared/apple-music.nvim/compare/v1.2.0...v1.3.0) (2024-11-25)
 
 
