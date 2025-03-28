@@ -371,7 +371,7 @@ M.get_playlists = function()
 	return playlists
 end
 
----Select and play a playlist using Telescope
+---Select and play a playlist
 ---@usage require('apple-music').select_playlist()
 M.select_playlist = function()
 	local playlists = M.get_playlists()
@@ -410,7 +410,7 @@ M.get_albums = function()
 	return unique_albums
 end
 
----Select and play an album using Telescope
+---Select and play an album from your library
 ---@usage require('apple-music').select_album()
 M.select_album = function()
 	local albums = M.get_albums()
@@ -433,7 +433,7 @@ M.get_tracks = function()
 	return tracks
 end
 
----Select and play a track using Telescope
+---Select and play a track from your library
 ---@usage require('apple-music').select_track()
 M.select_track = function()
 	local tracks = M.get_tracks()
@@ -441,8 +441,16 @@ M.select_track = function()
 	picker.pick("Select a track to play", tracks, M.play_track)
 end
 
+---Select and play a playlist using Telescope
+---@usage require('apple-music').select_playlist()
 M.select_playlist_telescope = M.select_playlist
+
+---Select and play an album from your library using Telescope
+---@usage require('apple-music').select_album()
 M.select_album_telescope = M.select_album
+
+---Select and play a track from your library using Telescope
+---@usage require('apple-music').select_track()
 M.select_track_telescope = M.select_track
 
 return M
