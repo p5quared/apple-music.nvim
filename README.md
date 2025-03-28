@@ -1,6 +1,7 @@
 # Neovim Apple Music Plugin
 
-This Neovim plugin allows you to control Apple Music directly from within Neovim using Lua and Telescope. You can play tracks, playlists, and albums, and control playback without leaving your favorite text editor.
+This Neovim plugin allows you to control Apple Music directly from within Neovim using Lua and Telescope (or `vim.ui.select`).
+You can play tracks, playlists, and albums, and control playback without leaving your favorite text editor.
 
 ![Demo of Selecting Album via Telescope](demos/select_album.gif)
 
@@ -37,7 +38,7 @@ Here is how I have this plugin setup, minus the dev stuff.
 I think this is a good overview of the main functionality as well.
 Toggling playback is arguably just as easy to do with general keyboard shortcuts
 (nowadays you often have media keys). I think the ability to browse
-and play via telescope is the the most useful feature of this plugin.
+and play via telescope (or `vim.ui.select`) is the the most useful feature of this plugin.
 
 Note that you have to manually cleanup the temporary playlists created by this plugin.
 In the future I may try to come up with an autocmd solution.
@@ -83,7 +84,6 @@ Before opening pull requests, please run `stylua` locally.
 
 ## Acknowledgements
 
-- [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [mcthomas/Apple-Music-CLI-Player](https://github.com/mcthomas/Apple-Music-CLI-Player)
     - Much of the Apple Script was taken/heavily inspired from this repo.
     I probably could have pieced together a lot of the basic stuff, but probably
