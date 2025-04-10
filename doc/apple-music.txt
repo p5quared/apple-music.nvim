@@ -17,6 +17,11 @@ PLUGIN OVERVIEW                                               *apple-music.nvim*
 M.setup()                                                              *M.setup*
      * {temp_playlist_name: string} - The name of the temporary playlist to use
      								(see `apple-music.caveats` for details on temporary playlists)
+     * {picker: "auto"|"telescope"|"fzf-lua"|"select"} - The picker to use for selecting items
+     								auto: use the first available picker. The order is: telescope, fzf-lua, select
+     								telescope: use telescope to select items
+     								fzf-lua: use fzf-lua to select items
+     								select: use `vim.ui.select` to select items
 
 
 M.play_track()                                                    *M.play_track*
@@ -142,6 +147,24 @@ M.get_tracks()                                                    *M.get_tracks*
 
 M.select_track()                                                *M.select_track*
     Select and play a track from your library
+    @usage require('apple-music').select_track()
+
+
+M.select_playlist_telescope()                      *M.select_playlist_telescope*
+    Select and play a playlist using Telescope
+    @deprecated Use `M.select_playlist` instead
+    @usage require('apple-music').select_playlist()
+
+
+M.select_album_telescope()                            *M.select_album_telescope*
+    Select and play an album from your library using Telescope
+    @deprecated Use `M.select_album` instead
+    @usage require('apple-music').select_album()
+
+
+M.select_track_telescope()                            *M.select_track_telescope*
+    Select and play a track from your library using Telescope
+    @deprecated Use `M.select_track_telescope` instead
     @usage require('apple-music').select_track()
 
 
