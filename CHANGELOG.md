@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/p5quared/apple-music.nvim/compare/v1.4.0...v1.5.0) (2025-04-10)
+
+
+### Features
+
+* **picker:** add support to fzf-lua ([af4fc5e](https://github.com/p5quared/apple-music.nvim/commit/af4fc5eb52800bdd65578cb63aca1f09ec400eed))
+* **picker:** add support to fzf-lua ([0090a5e](https://github.com/p5quared/apple-music.nvim/commit/0090a5e0b4d6fdc3a2f908783e5f041a0b1beda2))
+
 ## [1.4.0](https://github.com/p5quared/apple-music.nvim/compare/v1.3.0...v1.4.0) (2025-03-28)
 
 
