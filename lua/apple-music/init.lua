@@ -104,12 +104,36 @@ end
 ---@mod apple-music.nvim PLUGIN OVERVIEW
 local M = {}
 
+--- @class ConfigOptions The options for the plugin
+--- @field temp_playlist_name? string The name of the temporary playlist to use
+--- @field picker? Picker The picker to use for selecting items
+
+--- @class Config The configuration for the plugin
+--- @field temp_playlist_name string The name of the temporary playlist to use
+--- @field picker Picker The picker to use for selecting items
+local config = {
+	temp_playlist_name = "apple-music.nvim",
+	picker = "auto",
+}
+
+--- Convert options to config
+--- @param opts? ConfigOptions: The options to convert
+--- @return Config: The converted config
+local function options_to_config(opts)
+	return vim.tbl_extend("force", config, opts or {})
+end
+
 ---Setup the plugin
----@param opts table|nil: Optional configuration for the plugin
+---@param opts? ConfigOptions: Optional configuration for the plugin
 --- * {temp_playlist_name: string} - The name of the temporary playlist to use
 --- 								(see `apple-music.caveats` for details on temporary playlists)
+--- * {picker: "auto"|"telescope"|"fzf-lua"|"select"} - The picker to use for selecting items
+--- 								auto: use the first available picker. The order is: telescope, fzf-lua, select
+--- 								telescope: use telescope to select items
+--- 								fzf-lua: use fzf-lua to select items
+--- 								select: use `vim.ui.select` to select items
 M.setup = function(opts)
-	M.temp_playlist_name = opts.temp_playlist_name or "apple-music.nvim"
+	config = options_to_config(opts)
 
 	-- Cleanup temporary playlists on exit
 	-- TODO: Possible improvements by wrapping in pcall
@@ -179,7 +203,7 @@ M.play_album = function(album)
             play tempPlaylist
         end tell'
     ]],
-		M.temp_playlist_name,
+		config.temp_playlist_name,
 		sanitized
 	)
 
@@ -327,8 +351,8 @@ M._cleanup = function()
 			end if
 		end tell'
 		]],
-		M.temp_playlist_name,
-		M.temp_playlist_name
+		config.temp_playlist_name,
+		config.temp_playlist_name
 	)
 
 	local handle = io.popen(cmd)
@@ -376,7 +400,7 @@ end
 M.select_playlist = function()
 	local playlists = M.get_playlists()
 
-	picker.pick("Select a playlist to play", playlists, M.play_playlist)
+	picker.pick(config.picker, "Select a playlist to play", playlists, M.play_playlist)
 end
 
 local remove_duplicates = function(t)
@@ -415,7 +439,7 @@ end
 M.select_album = function()
 	local albums = M.get_albums()
 
-	picker.pick("Select an album to play", albums, M.play_album)
+	picker.pick(config.picker, "Select an album to play", albums, M.play_album)
 end
 
 ---Get a list of tracks from your Apple Music library
@@ -438,19 +462,31 @@ end
 M.select_track = function()
 	local tracks = M.get_tracks()
 
-	picker.pick("Select a track to play", tracks, M.play_track)
+	picker.pick(config.picker, "Select a track to play", tracks, M.play_track)
 end
 
 ---Select and play a playlist using Telescope
+---@deprecated Use `M.select_playlist` instead
 ---@usage require('apple-music').select_playlist()
-M.select_playlist_telescope = M.select_playlist
+M.select_playlist_telescope = function()
+	config.picker = "telescope"
+	M.select_playlist()
+end
 
 ---Select and play an album from your library using Telescope
+---@deprecated Use `M.select_album` instead
 ---@usage require('apple-music').select_album()
-M.select_album_telescope = M.select_album
+M.select_album_telescope = function()
+	config.picker = "telescope"
+	M.select_album()
+end
 
 ---Select and play a track from your library using Telescope
+---@deprecated Use `M.select_track_telescope` instead
 ---@usage require('apple-music').select_track()
-M.select_track_telescope = M.select_track
+M.select_track_telescope = function()
+	config.picker = "telescope"
+	M.select_track()
+end
 
 return M

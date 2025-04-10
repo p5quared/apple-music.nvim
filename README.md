@@ -1,6 +1,6 @@
 # Neovim Apple Music Plugin
 
-This Neovim plugin allows you to control Apple Music directly from within Neovim using Lua and Telescope (or `vim.ui.select`).
+This Neovim plugin allows you to control Apple Music directly from within Neovim using Lua and Telescope/fzf-lua (or `vim.ui.select`).
 You can play tracks, playlists, and albums, and control playback without leaving your favorite text editor.
 
 ![Demo of Selecting Album via Telescope](demos/select_album.gif)
@@ -10,7 +10,7 @@ You can play tracks, playlists, and albums, and control playback without leaving
 - Play specific tracks, playlists, or albums.
 - Control playback (play, pause, next track, previous track, toggle play/pause).
 - Enable or disable shuffle.
-- View and select entries using a picker. (if you don't have Telescope installed, `vim.ui.select` is used instead)
+- View and select entries using a picker. (if you don't have Telescope/fzf-lua installed, `vim.ui.select` is used instead)
 
 ## Installation
 
@@ -21,8 +21,11 @@ Here is how I have this plugin setup, minus the dev stuff.
 ```lua
 {
     'p5quared/apple-music.nvim',
-    -- Optional dependencies
-    -- dependencies = { 'nvim-telescope/telescope.nvim' },
+    -- Optional dependencies (install one of the supported pickers, e.g., 'nvim-telescope/telescope.nvim' for Telescope or 'ibhagwan/fzf-lua' for fzf-based picker)
+    -- dependencies = {
+    --   'nvim-telescope/telescope.nvim'
+    --   'ibhagwan/fzf-lua',
+    -- },
     config = true,
     keys = {
         { "<leader>amp", function() require("apple-music").toggle_play() end,               desc = "Toggle [P]layback" },
@@ -38,7 +41,7 @@ Here is how I have this plugin setup, minus the dev stuff.
 I think this is a good overview of the main functionality as well.
 Toggling playback is arguably just as easy to do with general keyboard shortcuts
 (nowadays you often have media keys). I think the ability to browse
-and play via telescope (or `vim.ui.select`) is the the most useful feature of this plugin.
+and play via telescope/fzf-lua (or `vim.ui.select`) is the most useful feature of this plugin.
 
 Note that you have to manually cleanup the temporary playlists created by this plugin.
 In the future I may try to come up with an autocmd solution.
@@ -50,6 +53,7 @@ You can customize the plugin by passing options to the `setup` function:
 ```lua
 require('apple-music').setup({
   temp_playlist_name = "nvim_apple_music_temp"  -- Custom temporary playlist name
+  picker = "auto",  -- Options: "auto", "telescope", "fzf-lua", or "select"
 })
 ```
 
